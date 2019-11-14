@@ -6,13 +6,16 @@ import mrmathami.thegame.Config;
 import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
 import mrmathami.thegame.entity.GameEntity;
-import mrmathami.thegame.entity.bullet.NormalBullet;
-import mrmathami.thegame.entity.enemy.NormalEnemy;
+import mrmathami.thegame.entity.bullet.*;
+import mrmathami.thegame.entity.enemy.*;
 import mrmathami.thegame.entity.tile.Mountain;
 import mrmathami.thegame.entity.tile.Road;
 import mrmathami.thegame.entity.tile.Target;
 import mrmathami.thegame.entity.tile.spawner.NormalSpawner;
 import mrmathami.thegame.entity.tile.tower.NormalTower;
+import mrmathami.thegame.entity.tile.tower.*;
+
+
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,15 +33,15 @@ public final class GameDrawer {
 			Road.class,
 			Mountain.class,
 			NormalTower.class,
-//			SniperTower.class,
-//			MachineGunTower.class,
+			SniperTower.class,
+			MachineGunTower.class,
 			NormalBullet.class,
-//			MachineGunBullet.class,
-//			SniperBullet.class,
+			MachineGunBullet.class,
+			SniperBullet.class,
 			NormalEnemy.class,
-//			SmallerEnemy.class,
-//			TankerEnemy.class,
-//			BossEnemy.class,
+			SmallerEnemy.class,
+			TankerEnemy.class,
+			BossEnemy.class,
 			NormalSpawner.class,
 //			SmallerSpawner.class,
 //			TankerSpawner.class,
