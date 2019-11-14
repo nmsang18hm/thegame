@@ -11,8 +11,7 @@ import mrmathami.thegame.entity.enemy.*;
 import mrmathami.thegame.entity.tile.Mountain;
 import mrmathami.thegame.entity.tile.Road;
 import mrmathami.thegame.entity.tile.Target;
-import mrmathami.thegame.entity.tile.spawner.NormalSpawner;
-import mrmathami.thegame.entity.tile.tower.NormalTower;
+import mrmathami.thegame.entity.tile.spawner.*;
 import mrmathami.thegame.entity.tile.tower.*;
 
 
@@ -43,9 +42,9 @@ public final class GameDrawer {
 			TankerEnemy.class,
 			BossEnemy.class,
 			NormalSpawner.class,
-//			SmallerSpawner.class,
-//			TankerSpawner.class,
-//			BossSpawner.class,
+			SmallerSpawner.class,
+			TankerSpawner.class,
+			BossSpawner.class,
 			Target.class
 	);
 	/**
@@ -57,19 +56,19 @@ public final class GameDrawer {
 			Map.entry(Road.class, new RoadDrawer()),
 			Map.entry(Mountain.class, new MountainDrawer()),
 			Map.entry(NormalTower.class, new NormalTowerDrawer()),
-//			Map.entry(SniperTower.class, new SniperTowerDrawer()),
-//			Map.entry(MachineGunTower.class, new MachineGunTowerDrawer()),
+			Map.entry(SniperTower.class, new SniperTowerDrawer()),
+			Map.entry(MachineGunTower.class, new MachineGunTowerDrawer()),
 			Map.entry(NormalBullet.class, new NormalBulletDrawer()),
-//			Map.entry(MachineGunBullet.class, new MachineGunBulletDrawer()),
-//			Map.entry(SniperBullet.class, new SniperBulletDrawer()),
+			Map.entry(MachineGunBullet.class, new MachineGunBulletDrawer()),
+			Map.entry(SniperBullet.class, new SniperBulletDrawer()),
 			Map.entry(NormalEnemy.class, new NormalEnemyDrawer()),
-//			Map.entry(SmallerEnemy.class, new SmallerEnemyDrawer()),
-//			Map.entry(TankerEnemy.class, new TankerEnemyDrawer()),
-//			Map.entry(BossEnemy.class, new BossEnemyDrawer()),
+			Map.entry(SmallerEnemy.class, new SmallerEnemyDrawer()),
+			Map.entry(TankerEnemy.class, new TankerEnemyDrawer()),
+			Map.entry(BossEnemy.class, new BossEnemyDrawer()),
 			Map.entry(NormalSpawner.class, new SpawnerDrawer()),
-//			Map.entry(SmallerSpawner.class, new SpawnerDrawer()),
-//			Map.entry(TankerSpawner.class, new SpawnerDrawer()),
-//			Map.entry(BossSpawner.class, new SpawnerDrawer()),
+			Map.entry(SmallerSpawner.class, new SpawnerDrawer()),
+			Map.entry(TankerSpawner.class, new SpawnerDrawer()),
+			Map.entry(BossSpawner.class, new SpawnerDrawer()),
 			Map.entry(Target.class, new TargetDrawer())
 	));
 
