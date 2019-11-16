@@ -7,10 +7,18 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.WindowEvent;
 import mrmathami.thegame.drawer.GameDrawer;
+import mrmathami.thegame.entity.GameEntity;
+import mrmathami.thegame.entity.tile.Mountain;
+import mrmathami.thegame.entity.tile.tower.AbstractTower;
+import mrmathami.thegame.entity.tile.tower.MachineGunTower;
+import mrmathami.thegame.entity.tile.tower.NormalTower;
+import mrmathami.thegame.entity.tile.tower.SniperTower;
 import mrmathami.utilities.ThreadFactoryBuilder;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -195,8 +203,27 @@ public final class GameController extends AnimationTimer {
 	 *
 	 * @param mouseEvent the mouse button you press down.
 	 */
+
+	private boolean isChooseTower = false;
+	private String nameTower = "";
 	final void mouseDownHandler(MouseEvent mouseEvent) {
-//		mouseEvent.getButton(); // which mouse button?
+		Rectangle rectangleNormal = new Rectangle(0*Config.TILE_SIZE, 17*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		Rectangle rectangleMachine = new Rectangle(1*Config.TILE_SIZE, 17*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		Rectangle rectangleSniper = new Rectangle(2*Config.TILE_SIZE, 17*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		if(rectangleNormal.contains(mouseEvent.getX(),mouseEvent.getY())) {
+			nameTower = "NormalTower";
+			isChooseTower = true;
+		}
+		else if(rectangleMachine.contains(mouseEvent.getX(), mouseEvent.getY())) {
+			nameTower = "MachineTower";
+			isChooseTower = true;
+		}
+		else if(rectangleSniper.contains(mouseEvent.getX(), mouseEvent.getY())) {
+			nameTower = "SniperTower";
+			isChooseTower = true;
+		}
+
+		//		mouseEvent.getButton(); // which mouse button?
 //		// Screen coordinate. Remember to convert to field coordinate
 //		drawer.screenToFieldPosX(mouseEvent.getX());
 //		drawer.screenToFieldPosY(mouseEvent.getY());
@@ -208,6 +235,28 @@ public final class GameController extends AnimationTimer {
 	 * @param mouseEvent the mouse button you release up.
 	 */
 	final void mouseUpHandler(MouseEvent mouseEvent) {
+		if(isChooseTower) {
+			boolean isHaveTower = false;
+			boolean isHaveMountain = false;
+			List<GameEntity> containingEntities = (List<GameEntity>) GameEntities.getContainingEntities(field.getEntities(), mouseEvent.getX()/Config.TILE_SIZE, mouseEvent.getY()/Config.TILE_SIZE, 0.1/Config.TILE_SIZE, 0.1/Config.TILE_SIZE);
+			for (GameEntity entity : containingEntities) {
+				if(entity instanceof AbstractTower) isHaveTower = true;
+				else if(entity instanceof Mountain) isHaveMountain = true;
+			}
+			if(containingEntities.size() > 0 && isHaveMountain == true && isHaveTower == false) {
+				if(nameTower == "NormalTower") {
+					field.doSpawn(new NormalTower(field.getTickCount(), (long)containingEntities.get(0).getPosX(), (long)containingEntities.get(0).getPosY()));
+				}
+				else if(nameTower == "MachineTower") {
+					field.doSpawn(new MachineGunTower(field.getTickCount(), (long)containingEntities.get(0).getPosX(), (long)containingEntities.get(0).getPosY()));
+				}
+				else if(nameTower == "SniperTower") {
+					field.doSpawn(new SniperTower(field.getTickCount(), (long)containingEntities.get(0).getPosX(), (long)containingEntities.get(0).getPosY()));
+				}
+			}
+		}
+		isChooseTower = false;
+		nameTower = "";
 //		mouseEvent.getButton(); // which mouse button?
 //		// Screen coordinate. Remember to convert to field coordinate
 //		drawer.screenToFieldPosX(mouseEvent.getX());
