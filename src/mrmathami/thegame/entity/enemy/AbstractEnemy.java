@@ -85,6 +85,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 	@Override
 	public final boolean onEffect(@Nonnull GameField field, @Nonnull LivingEntity livingEntity) {
 		// TODO: harm the target
+		livingEntity.doEffect(-1);
 		this.health = Long.MIN_VALUE;
 		return false;
 	}

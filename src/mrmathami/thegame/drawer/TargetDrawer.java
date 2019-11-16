@@ -3,6 +3,7 @@ package mrmathami.thegame.drawer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import mrmathami.thegame.entity.GameEntity;
+import mrmathami.thegame.entity.tile.Target;
 
 import javax.annotation.Nonnull;
 
@@ -12,5 +13,7 @@ public final class TargetDrawer implements EntityDrawer {
 		graphicsContext.setStroke(Color.DARKRED);
 		graphicsContext.setLineWidth(4);
 		graphicsContext.strokeRect(screenPosX, screenPosY, screenWidth, screenHeight);
+		graphicsContext.setFill(Color.BLACK);
+		graphicsContext.fillText("Health: " + ((Target)entity).getHealth(), 200, 12);
 	}
 }

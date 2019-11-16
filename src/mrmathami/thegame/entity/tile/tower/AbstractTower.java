@@ -30,8 +30,8 @@ public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTi
 		if (tickDown <= 0) {
 			// TODO: Find a target and spawn a bullet to that direction.
 			// Use GameEntities.getFilteredOverlappedEntities to find target in range
-			double centerX = ( getPosX() + getWidth() )/2.0;
-			double centerY = ( getPosY() + getHeight() )/2.0;
+			double centerX = ( 2*getPosX() + getWidth() )/2.0;
+			double centerY = ( 2*getPosY() + getHeight() )/2.0;
 			List<AbstractEnemy> enemies = (List<AbstractEnemy>) GameEntities.getFilteredOverlappedEntities(field.getEntities(), AbstractEnemy.class, centerX - range, centerY - range, 2*range, 2*range);
 			if (enemies.size() > 0) {
 				field.doSpawn(doSpawn(field.getTickCount(), centerX, centerY, enemies.get(0)));
