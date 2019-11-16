@@ -2,6 +2,7 @@ package mrmathami.thegame.entity.tile.tower;
 
 import mrmathami.thegame.Config;
 import mrmathami.thegame.entity.bullet.SniperBullet;
+import mrmathami.thegame.entity.enemy.AbstractEnemy;
 
 import javax.annotation.Nonnull;
 
@@ -12,7 +13,7 @@ public class SniperTower extends AbstractTower<SniperBullet> {
 
     @Nonnull
     @Override
-    protected final SniperBullet doSpawn(long createdTick, double posX, double posY, double deltaX, double deltaY) {
-        return new SniperBullet(createdTick, posX, posY, deltaX, deltaY);
+    protected final SniperBullet doSpawn(long createdTick, double posX, double posY, AbstractEnemy target) {
+        return new SniperBullet(createdTick, posX, posY, target);
     }
 }

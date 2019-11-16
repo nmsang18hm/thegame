@@ -3,6 +3,7 @@ package mrmathami.thegame.entity.tile.tower;
 import mrmathami.thegame.Config;
 import mrmathami.thegame.entity.bullet.MachineGunBullet;
 import mrmathami.thegame.entity.bullet.NormalBullet;
+import mrmathami.thegame.entity.enemy.AbstractEnemy;
 
 import javax.annotation.Nonnull;
 
@@ -13,7 +14,7 @@ public class MachineGunTower extends AbstractTower<MachineGunBullet> {
 
     @Nonnull
     @Override
-    protected final MachineGunBullet doSpawn(long createdTick, double posX, double posY, double deltaX, double deltaY) {
-        return new MachineGunBullet(createdTick, posX, posY, deltaX, deltaY);
+    protected final MachineGunBullet doSpawn(long createdTick, double posX, double posY, AbstractEnemy target) {
+        return new MachineGunBullet(createdTick, posX, posY, target);
     }
 }

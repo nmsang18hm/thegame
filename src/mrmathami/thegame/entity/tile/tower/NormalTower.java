@@ -2,6 +2,7 @@ package mrmathami.thegame.entity.tile.tower;
 
 import mrmathami.thegame.Config;
 import mrmathami.thegame.entity.bullet.NormalBullet;
+import mrmathami.thegame.entity.enemy.AbstractEnemy;
 
 import javax.annotation.Nonnull;
 
@@ -12,7 +13,7 @@ public final class NormalTower extends AbstractTower<NormalBullet> {
 
 	@Nonnull
 	@Override
-	protected final NormalBullet doSpawn(long createdTick, double posX, double posY, double deltaX, double deltaY) {
-		return new NormalBullet(createdTick, posX, posY, deltaX, deltaY);
+	protected final NormalBullet doSpawn(long createdTick, double posX, double posY, AbstractEnemy target) {
+		return new NormalBullet(createdTick, posX, posY, target);
 	}
 }

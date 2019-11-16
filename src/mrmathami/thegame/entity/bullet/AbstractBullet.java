@@ -2,20 +2,20 @@ package mrmathami.thegame.entity.bullet;
 
 import mrmathami.thegame.GameField;
 import mrmathami.thegame.entity.*;
+import mrmathami.thegame.entity.enemy.AbstractEnemy;
 
 import javax.annotation.Nonnull;
 
 public abstract class AbstractBullet extends AbstractEntity implements UpdatableEntity, EffectEntity, DestroyableEntity {
-	private final double deltaX;
-	private final double deltaY;
+	private AbstractEnemy target;
+	private double speedBullet;
 	private final long strength;
 	private long tickDown;
 
-	protected AbstractBullet(long createdTick, double posX, double posY, double deltaX, double deltaY, double speed, long strength, long timeToLive) {
+	protected AbstractBullet(long createdTick, double posX, double posY, AbstractEnemy target, double speed, long strength, long timeToLive) {
 		super(createdTick, posX, posY, 0.2, 0.2);
-		final double normalize = speed / Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-		this.deltaX = deltaX * normalize;
-		this.deltaY = deltaY * normalize;
+		this.target = target;
+		this.speedBullet = speed;
 		this.strength = strength;
 		this.tickDown = timeToLive;
 	}
@@ -23,6 +23,11 @@ public abstract class AbstractBullet extends AbstractEntity implements Updatable
 	@Override
 	public final void onUpdate(@Nonnull GameField field) {
 		this.tickDown -= 1;
+		double kcX = target.getPosX() - getPosX();
+		double kcY = target.getPosY() - getPosY();
+		double normalize = speedBullet / Math.sqrt(kcX * kcX + kcY * kcY);
+		double deltaX = kcX * normalize;
+		double deltaY = kcY * normalize;
 		setPosX(getPosX() + deltaX);
 		setPosY(getPosY() + deltaY);
 	}
