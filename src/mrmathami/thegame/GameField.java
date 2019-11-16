@@ -26,12 +26,16 @@ public final class GameField {
 	 * Field tick count
 	 */
 	private long tickCount;
+	/** Coin */
+	private double coins;
 
 	public GameField(@Nonnull GameStage gameStage) {
 		this.width = gameStage.getWidth();
 		this.height = gameStage.getHeight();
 		this.tickCount = 0;
 		entities.addAll(gameStage.getEntities());
+		// Tam thoi coin ban dau la 0
+		this.coins = 0;
 	}
 
 	public final double getWidth() {
@@ -44,6 +48,14 @@ public final class GameField {
 
 	public final long getTickCount() {
 		return tickCount;
+	}
+
+	public double getCoins() {
+		return coins;
+	}
+
+	public void setCoins(double coins) {
+		this.coins = coins;
 	}
 
 	/**

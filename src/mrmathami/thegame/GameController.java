@@ -123,6 +123,7 @@ public final class GameController extends AnimationTimer {
 		final double mspt = (System.nanoTime() - startNs) / 1000000.0;
 		graphicsContext.setFill(Color.BLACK);
 		graphicsContext.fillText(String.format("MSPT: %3.2f", mspt), 0, 12);
+		graphicsContext.fillText("Coins: " + field.getCoins(), 100, 12);
 
 		// if we have time to spend, do a spin
 		while (currentTick == tick) Thread.onSpinWait();
