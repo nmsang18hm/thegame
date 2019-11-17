@@ -244,14 +244,17 @@ public final class GameController extends AnimationTimer {
 				else if(entity instanceof Mountain) isHaveMountain = true;
 			}
 			if(containingEntities.size() > 0 && isHaveMountain == true && isHaveTower == false) {
-				if(nameTower == "NormalTower") {
+				if(nameTower == "NormalTower" && field.getCoins() >= Config.NORMAL_TOWER_COST) {
 					field.doSpawn(new NormalTower(field.getTickCount(), (long)containingEntities.get(0).getPosX(), (long)containingEntities.get(0).getPosY()));
+					field.setCoins(field.getCoins() - Config.NORMAL_TOWER_COST);
 				}
-				else if(nameTower == "MachineTower") {
+				else if(nameTower == "MachineTower" && field.getCoins() >= Config.MACHINE_GUN_TOWER_COST) {
 					field.doSpawn(new MachineGunTower(field.getTickCount(), (long)containingEntities.get(0).getPosX(), (long)containingEntities.get(0).getPosY()));
+					field.setCoins(field.getCoins() - Config.MACHINE_GUN_TOWER_COST);
 				}
-				else if(nameTower == "SniperTower") {
+				else if(nameTower == "SniperTower" && field.getCoins() >= Config.SNIPER_TOWER_COST) {
 					field.doSpawn(new SniperTower(field.getTickCount(), (long)containingEntities.get(0).getPosX(), (long)containingEntities.get(0).getPosY()));
+					field.setCoins(field.getCoins() - Config.SNIPER_TOWER_COST);
 				}
 			}
 		}
