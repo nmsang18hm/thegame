@@ -19,7 +19,7 @@ public final class NormalBulletDrawer implements EntityDrawer {
 			true,
 			CycleMethod.NO_CYCLE,
 			new Stop(0.0, Color.YELLOW),
-			new Stop(0.5, Color.RED),
+			new Stop(0.5, Color.GREEN),
 			new Stop(1.0, Color.WHITE)
 	);
 
