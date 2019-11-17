@@ -15,12 +15,12 @@ public final class SmallerEnemyDrawer implements EntityDrawer {
 		//graphicsContext.setFill(Color.MAGENTA);
 		//graphicsContext.fillRoundRect(screenPosX, screenPosY, screenWidth, screenHeight, 4, 4);
 		try {
-			Image image = new Image(new FileInputStream("C:\\Users\\user\\Documents\\GitHub\\thegame\\res\\image\\SmallerEnemy.png"));
+			Image image = new Image(new FileInputStream(".\\res\\image\\SmallerEnemy.png"));
 			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);
 			graphicsContext.drawImage(image1, screenPosX, screenPosY);
 		}
 		catch (FileNotFoundException e) {
-			System.out.println("FileNotFoundException");
+			System.out.println("SmallerEnemy Image Not found");
 		}
 	}
 }

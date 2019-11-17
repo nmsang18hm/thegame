@@ -16,11 +16,11 @@ public final class MountainDrawer implements EntityDrawer {
 		//graphicsContext.setFill(Color.DARKGREEN);
 		//graphicsContext.fillRect(screenPosX, screenPosY, screenWidth, screenHeight);
 		try {
-			Image image = new Image(new FileInputStream("C:\\Users\\user\\Documents\\GitHub\\thegame\\res\\image\\Mountain.png"));
+			Image image = new Image(new FileInputStream(".\\res\\image\\Mountain.png"));
 			graphicsContext.drawImage(image, screenPosX, screenPosY);
 		}
 		catch (FileNotFoundException e) {
-			System.out.println("FileNotFoundException");
+			System.out.println("Does not found Mountain image");
 		}
 	}
 }

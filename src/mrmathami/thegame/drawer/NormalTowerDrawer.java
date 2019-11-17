@@ -18,12 +18,12 @@ public final class NormalTowerDrawer implements EntityDrawer {
 		//graphicsContext.setFill(Color.RED);
 		//graphicsContext.fillOval(screenPosX, screenPosY, screenWidth, screenHeight);
 		try {
-			Image image = new Image(new FileInputStream("C:\\Users\\user\\Documents\\GitHub\\thegame\\res\\image\\NormalTower.png"));
+			Image image = new Image(new FileInputStream(".\\res\\image\\NormalTower.png"));
 			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);
 			graphicsContext.drawImage(image1, screenPosX, screenPosY);
 		}
 		catch (FileNotFoundException e) {
-			System.out.println("FileNotFoundException");
+			System.out.println("Does not found NormalTower image");
 		}
 	}
 }

@@ -21,11 +21,11 @@ public final class RoadDrawer implements EntityDrawer {
 //			graphicsContext.fillText(String.format("%2.2f", ((Road) entity).getDistance()), screenPosX, screenPosY + screenHeight / 2);
 //		}
 		try {
-			Image image = new Image(new FileInputStream("C:\\Users\\user\\Documents\\GitHub\\thegame\\res\\image\\Road.png"));
+			Image image = new Image(new FileInputStream("./res\\image\\Road.png"));
 			graphicsContext.drawImage(image, screenPosX, screenPosY);
 		}
 		catch (FileNotFoundException e) {
-			System.out.println("FileNotFoundException");
+			System.out.println("Does not found Road image ");
 		}
 	}
 }

@@ -18,12 +18,12 @@ public final class SniperTowerDrawer implements EntityDrawer {
 		//graphicsContext.setFill(Color.MEDIUMVIOLETRED);
 		//graphicsContext.fillOval(screenPosX, screenPosY, screenWidth, screenHeight);
 		try {
-			Image image = new Image(new FileInputStream("C:\\Users\\user\\Documents\\GitHub\\thegame\\res\\image\\SniperTower.png"));
+			Image image = new Image(new FileInputStream(".\\res\\image\\SniperTower.png"));
 			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);
 			graphicsContext.drawImage(image1, screenPosX, screenPosY);
 		}
 		catch (FileNotFoundException e) {
-			System.out.println("FileNotFoundException");
+			System.out.println("Does not found SniperTower image");
 		}
 	}
 }
