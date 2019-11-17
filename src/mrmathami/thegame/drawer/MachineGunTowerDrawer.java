@@ -18,12 +18,12 @@ public final class MachineGunTowerDrawer implements EntityDrawer {
 		//graphicsContext.setFill(Color.DARKRED);
 		//graphicsContext.fillOval(screenPosX, screenPosY, screenWidth, screenHeight);
 		try {
-			Image image = new Image(new FileInputStream("C:\\Users\\user\\Documents\\GitHub\\thegame\\res\\image\\Machinetower.png"));
+			Image image = new Image(new FileInputStream(".\\res\\image\\Machinetower.png"));
 			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);
 			graphicsContext.drawImage(image1, screenPosX, screenPosY);
 		}
 		catch (FileNotFoundException e) {
-			System.out.println("FileNotFoundException");
+			System.out.println("Does not found MachineTower ");
 		}
 	}
 }
