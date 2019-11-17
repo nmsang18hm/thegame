@@ -83,7 +83,7 @@ public final class GameController extends AnimationTimer {
 
 		// The game field. Please consider create another way to load a game field.
 		// TODO: I don't have much time, so, spawn some wall then :)
-		this.field = new GameField(GameStage.load("/stage/demo.txt"));
+		this.field = new GameField(GameStage.load("/stage/Man1.txt"));
 
 		// The drawer. Nothing fun here.
 		this.drawer = new GameDrawer(graphicsContext, field);
@@ -207,9 +207,9 @@ public final class GameController extends AnimationTimer {
 	private boolean isChooseTower = false;
 	private String nameTower = "";
 	final void mouseDownHandler(MouseEvent mouseEvent) {
-		Rectangle rectangleNormal = new Rectangle(0*Config.TILE_SIZE, 17*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
-		Rectangle rectangleMachine = new Rectangle(1*Config.TILE_SIZE, 17*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
-		Rectangle rectangleSniper = new Rectangle(2*Config.TILE_SIZE, 17*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		Rectangle rectangleNormal = new Rectangle(0*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		Rectangle rectangleMachine = new Rectangle(1*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		Rectangle rectangleSniper = new Rectangle(2*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		if(rectangleNormal.contains(mouseEvent.getX(),mouseEvent.getY())) {
 			nameTower = "NormalTower";
 			isChooseTower = true;

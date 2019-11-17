@@ -177,11 +177,11 @@ public final class GameDrawer {
 		}
 		// Ve thap de mua tam thoi
 		NormalTowerDrawer normalTowerDrawer = new NormalTowerDrawer();
-		normalTowerDrawer.draw(gameField.getTickCount(), graphicsContext, new NormalTower(gameField.getTickCount(), 0, 0), 0, 17*32, 32, 32, 32);
+		normalTowerDrawer.draw(gameField.getTickCount(), graphicsContext, new NormalTower(gameField.getTickCount(), 0, 0), 0, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		MachineGunTowerDrawer machineGunTowerDrawer = new MachineGunTowerDrawer();
-		machineGunTowerDrawer.draw(gameField.getTickCount(), graphicsContext, new MachineGunTower(gameField.getTickCount(), 0, 0), 32, 17*32, 32, 32, 32);
+		machineGunTowerDrawer.draw(gameField.getTickCount(), graphicsContext, new MachineGunTower(gameField.getTickCount(), 0, 0), Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		SniperTowerDrawer sniperTowerDrawer = new SniperTowerDrawer();
-		sniperTowerDrawer.draw(gameField.getTickCount(), graphicsContext, new SniperTower(gameField.getTickCount(), 0, 0), 2*32, 17*32, 32, 32, 32);
+		sniperTowerDrawer.draw(gameField.getTickCount(), graphicsContext, new SniperTower(gameField.getTickCount(), 0, 0), 2*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 	}
 
 	public final double screenToFieldPosX(double screenPosX) {
