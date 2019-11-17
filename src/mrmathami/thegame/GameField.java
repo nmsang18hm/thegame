@@ -34,8 +34,8 @@ public final class GameField {
 		this.height = gameStage.getHeight();
 		this.tickCount = 0;
 		entities.addAll(gameStage.getEntities());
-		// Tam thoi coin ban dau la 0
-		this.coins = 0;
+		// Tam thoi coin ban dau la 100
+		this.coins = 100;
 	}
 
 	public final double getWidth() {
