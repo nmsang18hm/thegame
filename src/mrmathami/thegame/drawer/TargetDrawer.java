@@ -26,5 +26,6 @@ public final class TargetDrawer implements EntityDrawer {
 		catch (FileNotFoundException e) {
 			System.out.println("FileNotFoundException");
 		}
+		graphicsContext.fillText("Health: " + ((Target)entity).getHealth(), 200, 12);
 	}
 }

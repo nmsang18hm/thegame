@@ -28,6 +28,7 @@ public final class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		primaryStage.setTitle(Config.GAME_NAME);
 		Canvas canvasMainMenu = new Canvas(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 		StackPane stackPaneMainMenu = new StackPane();
 		stackPaneMainMenu.getChildren().add(canvasMainMenu);
@@ -67,7 +68,6 @@ public final class Main extends Application {
 
 
 					primaryStage.setResizable(false);
-					primaryStage.setTitle(Config.GAME_NAME);
 					primaryStage.setOnCloseRequest(gameController::closeRequestHandler);
 					primaryStage.setScene(new Scene(new StackPane(canvas)));
 					primaryStage.show();
