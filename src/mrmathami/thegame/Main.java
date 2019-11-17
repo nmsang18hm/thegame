@@ -36,7 +36,7 @@ public final class Main extends Application {
 		primaryStage.setScene(sceneMainMenu);
 		GraphicsContext gcMainMenu = canvasMainMenu.getGraphicsContext2D();
 		try {
-			Image imageMainMenu = new Image(new FileInputStream("C:\\Users\\user\\Documents\\GitHub\\thegame\\res\\image\\MainMenu.png"));
+			Image imageMainMenu = new Image(new FileInputStream(".\\res\\image\\MainMenu.png"));
 			gcMainMenu.drawImage(imageMainMenu, 0, 0);
 		}
 		catch (FileNotFoundException e) {

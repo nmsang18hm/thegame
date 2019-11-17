@@ -222,7 +222,6 @@ public final class GameController extends AnimationTimer {
 			nameTower = "SniperTower";
 			isChooseTower = true;
 		}
-
 		//		mouseEvent.getButton(); // which mouse button?
 //		// Screen coordinate. Remember to convert to field coordinate
 //		drawer.screenToFieldPosX(mouseEvent.getX());

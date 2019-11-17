@@ -1,6 +1,7 @@
 package mrmathami.thegame.drawer;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import mrmathami.thegame.Config;
 import mrmathami.thegame.GameEntities;
@@ -18,6 +19,8 @@ import mrmathami.thegame.entity.tile.tower.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -182,6 +185,13 @@ public final class GameDrawer {
 		machineGunTowerDrawer.draw(gameField.getTickCount(), graphicsContext, new MachineGunTower(gameField.getTickCount(), 0, 0), Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		SniperTowerDrawer sniperTowerDrawer = new SniperTowerDrawer();
 		sniperTowerDrawer.draw(gameField.getTickCount(), graphicsContext, new SniperTower(gameField.getTickCount(), 0, 0), 2*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		try {
+			Image thungrac = new Image(new FileInputStream(".\\res\\image\\thungrac.png"));
+			graphicsContext.drawImage(thungrac, 3*Config.TILE_SIZE, 9*Config.TILE_SIZE);
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("FileNotFoundException");
+		}
 	}
 
 	public final double screenToFieldPosX(double screenPosX) {
