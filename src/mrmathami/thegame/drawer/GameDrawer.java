@@ -1,6 +1,7 @@
 package mrmathami.thegame.drawer;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import mrmathami.thegame.Config;
 import mrmathami.thegame.GameEntities;
@@ -18,10 +19,12 @@ import mrmathami.thegame.entity.tile.tower.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.FileNotFoundException;
 
 public final class GameDrawer {
 	/**
@@ -176,6 +179,13 @@ public final class GameDrawer {
 			}
 		}
 		// Ve thap de mua tam thoi
+		try
+		{
+			Image dollarSignImage  = new Image(new FileInputStream(".\\res\\image\\yellowdollarsign.png"));
+			Image dollarSignImageRemovedWhite = DeleteWhiteImage.deleteWhiteImage(dollarSignImage);
+			graphicsContext.drawImage(dollarSignImageRemovedWhite,3 * Config.TILE_SIZE,9*Config.TILE_SIZE,Config.TILE_SIZE,Config.TILE_SIZE);
+		}
+		catch (Exception e){}
 		NormalTowerDrawer normalTowerDrawer = new NormalTowerDrawer();
 		normalTowerDrawer.draw(gameField.getTickCount(), graphicsContext, new NormalTower(gameField.getTickCount(), 0, 0), 0, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		MachineGunTowerDrawer machineGunTowerDrawer = new MachineGunTowerDrawer();

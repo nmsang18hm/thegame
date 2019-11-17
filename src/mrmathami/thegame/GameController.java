@@ -2,7 +2,10 @@ package mrmathami.thegame;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -206,10 +209,13 @@ public final class GameController extends AnimationTimer {
 
 	private boolean isChooseTower = false;
 	private String nameTower = "";
+	private  boolean isSellingTower = false;
 	final void mouseDownHandler(MouseEvent mouseEvent) {
 		Rectangle rectangleNormal = new Rectangle(0*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		Rectangle rectangleMachine = new Rectangle(1*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		Rectangle rectangleSniper = new Rectangle(2*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		Rectangle rectangleSellTower = new Rectangle(3 * Config.TILE_SIZE,9*Config.TILE_SIZE,Config.TILE_SIZE,Config.TILE_SIZE);
+
 		if(rectangleNormal.contains(mouseEvent.getX(),mouseEvent.getY())) {
 			nameTower = "NormalTower";
 			isChooseTower = true;
@@ -221,6 +227,12 @@ public final class GameController extends AnimationTimer {
 		else if(rectangleSniper.contains(mouseEvent.getX(), mouseEvent.getY())) {
 			nameTower = "SniperTower";
 			isChooseTower = true;
+		}
+		else if(rectangleSellTower.contains(mouseEvent.getX(),mouseEvent.getY()))
+		{
+			isSellingTower = true;
+			System.out.println("click to selling tower");
+
 		}
 
 		//		mouseEvent.getButton(); // which mouse button?
@@ -235,15 +247,38 @@ public final class GameController extends AnimationTimer {
 	 * @param mouseEvent the mouse button you release up.
 	 */
 	final void mouseUpHandler(MouseEvent mouseEvent) {
-		if(isChooseTower) {
-			boolean isHaveTower = false;
-			boolean isHaveMountain = false;
-			List<GameEntity> containingEntities = (List<GameEntity>) GameEntities.getContainingEntities(field.getEntities(), mouseEvent.getX()/Config.TILE_SIZE, mouseEvent.getY()/Config.TILE_SIZE, 0.1/Config.TILE_SIZE, 0.1/Config.TILE_SIZE);
-			for (GameEntity entity : containingEntities) {
-				if(entity instanceof AbstractTower) isHaveTower = true;
-				else if(entity instanceof Mountain) isHaveMountain = true;
+		boolean isHaveTower = false;
+		boolean isHaveMountain = false;
+		List<GameEntity> containingEntities = (List<GameEntity>) GameEntities.getContainingEntities(field.getEntities(), mouseEvent.getX()/Config.TILE_SIZE, mouseEvent.getY()/Config.TILE_SIZE, 0.1/Config.TILE_SIZE, 0.1/Config.TILE_SIZE);
+		for (GameEntity entity : containingEntities) {
+			if(entity instanceof AbstractTower) isHaveTower = true;
+			else if(entity instanceof Mountain) isHaveMountain = true;
+		}
+		if(isSellingTower)
+		{
+			if(containingEntities.size() > 0 && isHaveMountain == true && isHaveTower == true && isSellingTower == true)
+			{
+				System.out.println("check to remove tower");
+				for (GameEntity entity : containingEntities)
+				{
+					if(entity instanceof AbstractTower && entity.isContaining((long)containingEntities.get(0).getPosX(), (long)containingEntities.get(0).getPosY(),Config.TILE_SIZE,Config.TILE_SIZE))
+					{
+						System.out.println("removing tower");
+						AbstractTower tower = (AbstractTower)entity;
+
+						field.addCoins(1000);
+
+						containingEntities.remove(entity);
+
+						System.out.println("remove Tower");
+					}
+				}
 			}
-			if(containingEntities.size() > 0 && isHaveMountain == true && isHaveTower == false) {
+		}
+		if(isChooseTower) {
+
+
+			 if(containingEntities.size() > 0 && isHaveMountain == true && isHaveTower == false) {
 				if(nameTower == "NormalTower") {
 					field.doSpawn(new NormalTower(field.getTickCount(), (long)containingEntities.get(0).getPosX(), (long)containingEntities.get(0).getPosY()));
 				}

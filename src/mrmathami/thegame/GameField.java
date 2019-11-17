@@ -53,6 +53,10 @@ public final class GameField {
 	public double getCoins() {
 		return coins;
 	}
+	public void addCoins(double coins)
+	{
+		this.coins += coins;
+	}
 
 	public void setCoins(double coins) {
 		this.coins = coins;
