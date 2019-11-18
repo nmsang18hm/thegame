@@ -1,5 +1,7 @@
 package mrmathami.thegame.entity.tile.tower;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
 import mrmathami.thegame.entity.UpdatableEntity;
@@ -35,6 +37,10 @@ public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTi
 			List<AbstractEnemy> enemies = (List<AbstractEnemy>) GameEntities.getFilteredOverlappedEntities(field.getEntities(), AbstractEnemy.class, centerX - range, centerY - range, 2*range, 2*range);
 			if (enemies.size() > 0) {
 				field.doSpawn(doSpawn(field.getTickCount(), centerX, centerY, enemies.get(0)));
+				// TODO : play sound of bullet
+				MediaPlayer player = new MediaPlayer(new Media("./res/sound/sniper.mp3"));
+				player.play();
+
 				this.tickDown = speed;
 			}
 			// Remember to set this.tickDown back to this.speed after shooting something.

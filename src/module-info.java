@@ -8,6 +8,7 @@ module towerdefense {
 	exports mrmathami.thegame.entity.tile;
 
 	requires javafx.base;
+	requires javafx.media;
 	requires javafx.graphics;
 	requires javafx.controls;
 	requires javafx.fxml;

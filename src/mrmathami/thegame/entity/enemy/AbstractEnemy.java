@@ -4,6 +4,8 @@ import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
 import mrmathami.thegame.entity.*;
 import mrmathami.thegame.entity.tile.Road;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -77,6 +79,9 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 	public final void onDestroy(@Nonnull GameField field) {
 
 		// TODO: reward
+		Media enemyDeathSound = new Media("./res/sound/zombiedeath.wav");
+		MediaPlayer player = new MediaPlayer(enemyDeathSound);
+		player.play();
 		increaseCoin(field);
 	}
 

@@ -19,7 +19,7 @@ public final class TargetDrawer implements EntityDrawer {
 		//graphicsContext.setFill(Color.BLACK);
 		//graphicsContext.fillText("Health: " + ((Target)entity).getHealth(), 200, 12);
 		try {
-			Image image = new Image(new FileInputStream("C:\\Users\\user\\Documents\\GitHub\\thegame\\res\\image\\Target.png"));
+			Image image = new Image(new FileInputStream(".\\res\\image\\Target.png"));
 			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);
 			graphicsContext.drawImage(image1, screenPosX, screenPosY);
 		}
