@@ -75,6 +75,10 @@ public final class GameField {
 		if (entity.isBeingOverlapped(0.0, 0.0, width, height)) spawnEntities.add(entity);
 	}
 
+	public final void removeEntity(GameEntity entity) {
+		entities.remove(entity);
+	}
+
 	/**
 	 * Do a tick, in other words, update the field after a fixed period of time.
 	 * Current update sequence:

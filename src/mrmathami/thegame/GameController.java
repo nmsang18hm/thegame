@@ -206,6 +206,7 @@ public final class GameController extends AnimationTimer {
 
 	private boolean isChooseTower = false;
 	private String nameTower = "";
+	private AbstractTower towerDeleted = null;
 	final void mouseDownHandler(MouseEvent mouseEvent) {
 		Rectangle rectangleNormal = new Rectangle(0*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		Rectangle rectangleMachine = new Rectangle(1*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
@@ -221,6 +222,13 @@ public final class GameController extends AnimationTimer {
 		else if(rectangleSniper.contains(mouseEvent.getX(), mouseEvent.getY())) {
 			nameTower = "SniperTower";
 			isChooseTower = true;
+		}
+
+		List<GameEntity> containingEntities = (List<GameEntity>) GameEntities.getContainingEntities(field.getEntities(), mouseEvent.getX()/Config.TILE_SIZE, mouseEvent.getY()/Config.TILE_SIZE, 0.1/Config.TILE_SIZE, 0.1/Config.TILE_SIZE);
+		for (GameEntity entity : containingEntities) {
+			if(entity instanceof AbstractTower) {
+				towerDeleted = (AbstractTower) entity;
+			}
 		}
 		//		mouseEvent.getButton(); // which mouse button?
 //		// Screen coordinate. Remember to convert to field coordinate
@@ -257,8 +265,24 @@ public final class GameController extends AnimationTimer {
 				}
 			}
 		}
+		Rectangle rectangleDelete = new Rectangle(3*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		if(rectangleDelete.contains(mouseEvent.getX(), mouseEvent.getY())) {
+			if(towerDeleted != null) {
+				if(towerDeleted instanceof NormalTower) {
+					field.setCoins(field.getCoins() + Config.NORMAL_TOWER_COST/2.0);
+				}
+				else if(towerDeleted instanceof SniperTower) {
+					field.setCoins(field.getCoins() + Config.SNIPER_TOWER_COST/2.0);
+				}
+				else if (towerDeleted instanceof MachineGunTower) {
+					field.setCoins(field.getCoins() + Config.MACHINE_GUN_TOWER_COST/2.0);
+				}
+				field.removeEntity(towerDeleted);
+			}
+		}
 		isChooseTower = false;
 		nameTower = "";
+		towerDeleted = null;
 //		mouseEvent.getButton(); // which mouse button?
 //		// Screen coordinate. Remember to convert to field coordinate
 //		drawer.screenToFieldPosX(mouseEvent.getX());
