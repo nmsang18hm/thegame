@@ -1,5 +1,7 @@
 package mrmathami.thegame.entity.tile.tower;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
 import mrmathami.thegame.entity.UpdatableEntity;
@@ -8,6 +10,7 @@ import mrmathami.thegame.entity.enemy.AbstractEnemy;
 import mrmathami.thegame.entity.tile.AbstractTile;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,6 +19,7 @@ public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTi
 	private final long speed;
 
 	private long tickDown;
+
 
 	protected AbstractTower(long createdTick, long posX, long posY, double range, long speed) {
 		super(createdTick, posX, posY, 1L, 1L);
@@ -34,7 +38,11 @@ public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTi
 			double centerY = ( 2*getPosY() + getHeight() )/2.0;
 			List<AbstractEnemy> enemies = (List<AbstractEnemy>) GameEntities.getFilteredOverlappedEntities(field.getEntities(), AbstractEnemy.class, centerX - range, centerY - range, 2*range, 2*range);
 			if (enemies.size() > 0) {
-				field.doSpawn(doSpawn(field.getTickCount(), centerX, centerY, enemies.get(0)));
+				if(!enemies.get(0).isDestroyed())
+				{
+					field.doSpawn(doSpawn(field.getTickCount(), centerX, centerY, enemies.get(0)));
+				}
+
 				this.tickDown = speed;
 			}
 			// Remember to set this.tickDown back to this.speed after shooting something.

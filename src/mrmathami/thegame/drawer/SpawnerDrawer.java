@@ -16,7 +16,7 @@ public final class SpawnerDrawer implements EntityDrawer {
 		//graphicsContext.setLineWidth(4);
 		//graphicsContext.strokeRect(screenPosX, screenPosY, screenWidth, screenHeight);
 		try {
-			Image image = new Image(new FileInputStream("C:\\Users\\user\\Documents\\GitHub\\thegame\\res\\image\\Spawner.png"));
+			Image image = new Image(new FileInputStream(".\\res\\image\\Spawner.png"));
 			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);
 			graphicsContext.drawImage(image1, screenPosX, screenPosY);
 		}

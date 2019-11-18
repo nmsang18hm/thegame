@@ -11,10 +11,15 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.FontSmoothingType;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -26,8 +31,25 @@ public final class Main extends Application {
 		Application.launch(args);
 	}
 
+	void playBackgroundMusic()
+	{
+
+		File soun = new File("./res/sound/nhacNenChinh.mp3");
+		AudioClip clip = new AudioClip(soun.toURI().toString());
+		clip.setCycleCount(10000);
+		clip.play();
+//		MediaPlayer player = new MediaPlayer(new Media(soun.toURI().toString()));
+//		player.setStartTime(Duration.seconds(0));
+//		player.setStopTime(Duration.hours(1000));
+//		player.play();
+	}
+
 	@Override
 	public void start(Stage primaryStage) {
+
+
+		playBackgroundMusic();
+
 		primaryStage.setTitle(Config.GAME_NAME);
 		Canvas canvasMainMenu = new Canvas(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 		StackPane stackPaneMainMenu = new StackPane();
@@ -40,7 +62,7 @@ public final class Main extends Application {
 			gcMainMenu.drawImage(imageMainMenu, 0, 0);
 		}
 		catch (FileNotFoundException e) {
-			System.out.println("FileNotFoundException");
+			System.out.println("Main Menu image not found");
 		}
 		primaryStage.show();
 		Rectangle rectanglePlay = new Rectangle(404, 171, 316, 126);
@@ -72,9 +94,14 @@ public final class Main extends Application {
 					primaryStage.setScene(new Scene(new StackPane(canvas)));
 					primaryStage.show();
 
+//					Thread t = new Thread(Main.this::playBackgroundMusic);
+//					t.start();
+
+
 					gameController.start();
 				}
 			}
 		});
+
 	}
 }

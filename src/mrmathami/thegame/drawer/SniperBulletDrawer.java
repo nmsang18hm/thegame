@@ -32,7 +32,7 @@ public final class SniperBulletDrawer implements EntityDrawer {
 		//graphicsContext.setFill(gradient);
 		//graphicsContext.fillOval(screenPosX, screenPosY, screenWidth, screenHeight);
 		try {
-			Image image = new Image(new FileInputStream("C:\\Users\\user\\Documents\\GitHub\\thegame\\res\\image\\SniperBullet.png"));
+			Image image = new Image(new FileInputStream(".\\res\\image\\SniperBullet.png"));
 			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);
 			graphicsContext.drawImage(image1, screenPosX, screenPosY);
 		}
