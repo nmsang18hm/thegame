@@ -161,7 +161,7 @@ public final class GameDrawer {
 				fieldStartPosX, fieldStartPosY, Config.SCREEN_WIDTH / fieldZoom, Config.SCREEN_HEIGHT / fieldZoom));
 		entities.sort(GameDrawer::entityDrawingOrderComparator);
 
-		graphicsContext.setFill(Color.BLACK);
+		graphicsContext.setFill(Color.WHITE);
 		graphicsContext.fillRect(0.0, 0.0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 
 		GameEntity lastEntity = null;
@@ -194,8 +194,8 @@ public final class GameDrawer {
 		SniperTowerDrawer sniperTowerDrawer = new SniperTowerDrawer();
 		sniperTowerDrawer.draw(gameField.getTickCount(), graphicsContext, new SniperTower(gameField.getTickCount(), 0, 0), 2*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		try {
-			Image thungrac = new Image(new FileInputStream(".\\res\\image\\thungrac.png"));
-			graphicsContext.drawImage(thungrac, 3*Config.TILE_SIZE, 9*Config.TILE_SIZE);
+			Image sell = new Image(new FileInputStream(".\\res\\image\\yellowdollarsign.png"));
+			graphicsContext.drawImage(sell, 3*Config.TILE_SIZE, 9*Config.TILE_SIZE);
 		}
 		catch (FileNotFoundException e) {
 			System.out.println("FileNotFoundException");
