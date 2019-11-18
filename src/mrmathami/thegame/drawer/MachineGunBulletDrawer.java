@@ -31,7 +31,7 @@ public final class MachineGunBulletDrawer implements EntityDrawer {
 		//graphicsContext.setFill(gradient);
 		//graphicsContext.fillOval(screenPosX, screenPosY, screenWidth, screenHeight);
 		try {
-			Image image = new Image(new FileInputStream("C:\\Users\\user\\Documents\\GitHub\\thegame\\res\\image\\MachineBullet.png"));
+			Image image = new Image(new FileInputStream(".\\res\\image\\MachineBullet.png"));
 			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);
 			graphicsContext.drawImage(image1, screenPosX, screenPosY);
 		}

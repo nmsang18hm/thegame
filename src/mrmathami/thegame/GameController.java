@@ -3,14 +3,20 @@ package mrmathami.thegame;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import mrmathami.thegame.drawer.GameDrawer;
+import mrmathami.thegame.drawer.MachineGunTowerDrawer;
+import mrmathami.thegame.drawer.NormalTowerDrawer;
+import mrmathami.thegame.drawer.SniperTowerDrawer;
 import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.tile.Mountain;
 import mrmathami.thegame.entity.tile.tower.AbstractTower;
@@ -29,6 +35,8 @@ import java.util.concurrent.TimeUnit;
  * A game controller. Everything about the game should be managed in here.
  */
 public final class GameController extends AnimationTimer {
+	public double xMouse;
+	public double yMouse;
 	/**
 	 * Advance stuff. Just don't touch me. Google me if you are curious.
 	 */
@@ -45,11 +53,15 @@ public final class GameController extends AnimationTimer {
 	 */
 	private final GraphicsContext graphicsContext;
 
+	private final Stage stage;
+
 	/**
 	 * Game field. Contain everything in the current game field.
 	 * Responsible to update the field every tick.
 	 * Kinda advance, modify if you are sure about your change.
 	 */
+	private final Canvas canvas;
+
 	private GameField field;
 	/**
 	 * Game drawer. Responsible to draw the field every tick.
@@ -74,8 +86,10 @@ public final class GameController extends AnimationTimer {
 	 *
 	 * @param graphicsContext the screen to draw on
 	 */
-	public GameController(GraphicsContext graphicsContext) {
+	public GameController(GraphicsContext graphicsContext, Canvas canvas, Stage stage) {
 		// The screen to draw on
+		this.stage = stage;
+		this.canvas = canvas;
 		this.graphicsContext = graphicsContext;
 
 		// Just a few acronyms.
@@ -133,6 +147,35 @@ public final class GameController extends AnimationTimer {
 		graphicsContext.setFill(Color.BLACK);
 		graphicsContext.fillText(String.format("MSPT: %3.2f", mspt), 0, 12);
 		graphicsContext.fillText("Coins: " + field.getCoins(), 100, 12);
+
+		if(isChooseTower) {
+			double Xgoc = xMouse - Config.TILE_SIZE/2.0;
+			double Ygoc = yMouse - Config.TILE_SIZE/2.0;
+			if(nameTower == "NormalTower") {
+				NormalTowerDrawer normalTowerDrawer = new NormalTowerDrawer();
+				normalTowerDrawer.draw(field.getTickCount(), graphicsContext, new NormalTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+			}
+			else if(nameTower == "MachineTower") {
+				MachineGunTowerDrawer machineGunTowerDrawer = new MachineGunTowerDrawer();
+				machineGunTowerDrawer.draw(field.getTickCount(), graphicsContext, new MachineGunTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+			}
+			else if (nameTower == "SniperTower") {
+				SniperTowerDrawer sniperTowerDrawer = new SniperTowerDrawer();
+				sniperTowerDrawer.draw(field.getTickCount(), graphicsContext, new SniperTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+			}
+		}
+		else {
+			xMouse = 9999;
+			xMouse = 9999;
+		}
+
+		canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				xMouse = mouseEvent.getX();
+				yMouse = mouseEvent.getY();
+			}
+		});
 
 		// if we have time to spend, do a spin
 		while (currentTick == tick) Thread.onSpinWait();
@@ -289,4 +332,5 @@ public final class GameController extends AnimationTimer {
 //		drawer.screenToFieldPosX(mouseEvent.getX());
 //		drawer.screenToFieldPosY(mouseEvent.getY());
 	}
+
 }

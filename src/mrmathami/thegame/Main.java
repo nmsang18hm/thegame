@@ -50,7 +50,7 @@ public final class Main extends Application {
 				if(rectanglePlay.contains(mouseEvent.getX(), mouseEvent.getY())) {
 					final Canvas canvas = new Canvas(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 					final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-					final GameController gameController = new GameController(graphicsContext);
+					final GameController gameController = new GameController(graphicsContext, canvas, primaryStage);
 
 					canvas.setFocusTraversable(true);
 					graphicsContext.setFontSmoothingType(FontSmoothingType.LCD);
@@ -62,9 +62,9 @@ public final class Main extends Application {
 					//		canvas.setOnKeyTyped(...);
 
 					canvas.setOnMousePressed(gameController::mouseDownHandler);
+					//canvas.setOnMouseDragged(gameController::mouseMovedHandler);
 					canvas.setOnMouseReleased(gameController::mouseUpHandler);
 					//		canvas.setOnMouseClicked(...);
-					//		canvas.setOnMouseMoved(...);
 
 
 					primaryStage.setResizable(false);

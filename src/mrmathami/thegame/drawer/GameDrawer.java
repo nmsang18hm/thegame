@@ -161,7 +161,7 @@ public final class GameDrawer {
 				fieldStartPosX, fieldStartPosY, Config.SCREEN_WIDTH / fieldZoom, Config.SCREEN_HEIGHT / fieldZoom));
 		entities.sort(GameDrawer::entityDrawingOrderComparator);
 
-		graphicsContext.setFill(Color.WHITE);
+		graphicsContext.setFill(Color.BLACK);
 		graphicsContext.fillRect(0.0, 0.0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 
 		GameEntity lastEntity = null;

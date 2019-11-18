@@ -96,10 +96,10 @@ public final class Config {
 	public static final double TANKER_ENEMY_SPEED = 0.2/3.0;
 	public static final long TANKER_ENEMY_REWARD = 3;
 
-	public static final double BOSS_ENEMY_SIZE = 1.2;
+	public static final double BOSS_ENEMY_SIZE = 1.0;
 	public static final long BOSS_ENEMY_HEALTH = 2000;
 	public static final long BOSS_ENEMY_ARMOR = 8;
-	public static final double BOSS_ENEMY_SPEED = 0.1;
+	public static final double BOSS_ENEMY_SPEED = 0.11;
 	public static final long BOSS_ENEMY_REWARD = 10;
 	//endregion
 
