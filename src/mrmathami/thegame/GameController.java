@@ -1,3 +1,4 @@
+
 package mrmathami.thegame;
 
 import javafx.animation.AnimationTimer;
