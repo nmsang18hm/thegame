@@ -1,5 +1,8 @@
 package mrmathami.thegame.entity.enemy;
 
+import javafx.scene.media.AudioClip;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
 import mrmathami.thegame.entity.*;
@@ -8,6 +11,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.util.Collection;
 
 public abstract class AbstractEnemy extends AbstractEntity implements UpdatableEntity, EffectEntity, LivingEntity, DestroyListener {
@@ -74,14 +78,22 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 		setPosX(newPosX);
 		setPosY(newPosY);
 	}
-
+	static File sound = new File("./res/sound/zombiedeath.wav");
+	static void playZombieDeathSound()
+	{
+		AudioClip clip = new AudioClip(sound.toURI().toString());
+		clip.setCycleCount(1);
+		clip.play();
+	}
+	Rectangle getHealthBar(int posX,int posY)
+	{
+		Rectangle rectangle = new Rectangle(health*9,30);
+		return rectangle;
+	}
 	@Override
 	public final void onDestroy(@Nonnull GameField field) {
 
 		// TODO: reward
-		Media enemyDeathSound = new Media("./res/sound/zombiedeath.wav");
-		MediaPlayer player = new MediaPlayer(enemyDeathSound);
-		player.play();
 		increaseCoin(field);
 	}
 
@@ -90,7 +102,8 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 	@Override
 	public final boolean onEffect(@Nonnull GameField field, @Nonnull LivingEntity livingEntity) {
 		// TODO: harm the target
-		livingEntity.doEffect(-1);
+		if(!livingEntity.isDestroyed()) livingEntity.doEffect(-1);
+
 		this.health = Long.MIN_VALUE;
 		return false;
 	}
@@ -102,11 +115,20 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 
 	@Override
 	public final void doEffect(long value) {
-		if (health != Long.MIN_VALUE && (value < -armor || value > 0)) this.health += value;
+		if (health != Long.MIN_VALUE && (value < -armor || value > 0))
+		{
+			this.health += value;
+			if(isDestroyed())
+			{
+				doDestroy();
+			}
+		}
 	}
 
 	@Override
 	public final void doDestroy() {
+		playZombieDeathSound();
+
 		this.health = Long.MIN_VALUE;
 	}
 

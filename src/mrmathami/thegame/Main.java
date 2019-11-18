@@ -11,11 +11,13 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.FontSmoothingType;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,17 +31,24 @@ public final class Main extends Application {
 		Application.launch(args);
 	}
 
+	void playBackgroundMusic()
+	{
+
+		File soun = new File("./res/sound/nhacNenChinh.mp3");
+		AudioClip clip = new AudioClip(soun.toURI().toString());
+		clip.setCycleCount(10000);
+		clip.play();
+//		MediaPlayer player = new MediaPlayer(new Media(soun.toURI().toString()));
+//		player.setStartTime(Duration.seconds(0));
+//		player.setStopTime(Duration.hours(1000));
+//		player.play();
+	}
+
 	@Override
 	public void start(Stage primaryStage) {
-		File soun = new File("./res/sound/nhacNenChinh.mp3");
-		MediaPlayer player = new MediaPlayer(new Media(soun.toURI().toString()));
-		player.play();
 
-		try
-		{
 
-		}
-		catch (Exception e){ }
+		playBackgroundMusic();
 
 		primaryStage.setTitle(Config.GAME_NAME);
 		Canvas canvasMainMenu = new Canvas(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
@@ -85,10 +94,14 @@ public final class Main extends Application {
 					primaryStage.setScene(new Scene(new StackPane(canvas)));
 					primaryStage.show();
 
+//					Thread t = new Thread(Main.this::playBackgroundMusic);
+//					t.start();
+
 
 					gameController.start();
 				}
 			}
 		});
+
 	}
 }

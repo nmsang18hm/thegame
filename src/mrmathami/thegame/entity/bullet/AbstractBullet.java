@@ -23,13 +23,24 @@ public abstract class AbstractBullet extends AbstractEntity implements Updatable
 	@Override
 	public final void onUpdate(@Nonnull GameField field) {
 		this.tickDown -= 1;
-		double kcX = target.getPosX() - getPosX();
-		double kcY = target.getPosY() - getPosY();
-		double normalize = speedBullet / Math.sqrt(kcX * kcX + kcY * kcY);
-		double deltaX = kcX * normalize;
-		double deltaY = kcY * normalize;
-		setPosX(getPosX() + deltaX);
-		setPosY(getPosY() + deltaY);
+		if(target.isDestroyed())
+		{
+			doDestroy();
+			//
+			setPosX(1000);
+			setPosY(1000);
+		}
+		else
+		{
+			double kcX = target.getPosX() - getPosX();
+			double kcY = target.getPosY() - getPosY();
+			double normalize = speedBullet / Math.sqrt(kcX * kcX + kcY * kcY);
+			double deltaX = kcX * normalize;
+			double deltaY = kcY * normalize;
+			setPosX(getPosX() + deltaX);
+			setPosY(getPosY() + deltaY);
+		}
+
 	}
 
 	@Override

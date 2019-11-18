@@ -10,6 +10,7 @@ import mrmathami.thegame.entity.enemy.AbstractEnemy;
 import mrmathami.thegame.entity.tile.AbstractTile;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTi
 	private final long speed;
 
 	private long tickDown;
+
 
 	protected AbstractTower(long createdTick, long posX, long posY, double range, long speed) {
 		super(createdTick, posX, posY, 1L, 1L);
@@ -36,10 +38,10 @@ public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTi
 			double centerY = ( 2*getPosY() + getHeight() )/2.0;
 			List<AbstractEnemy> enemies = (List<AbstractEnemy>) GameEntities.getFilteredOverlappedEntities(field.getEntities(), AbstractEnemy.class, centerX - range, centerY - range, 2*range, 2*range);
 			if (enemies.size() > 0) {
-				field.doSpawn(doSpawn(field.getTickCount(), centerX, centerY, enemies.get(0)));
-				// TODO : play sound of bullet
-				MediaPlayer player = new MediaPlayer(new Media("./res/sound/sniper.mp3"));
-				player.play();
+				if(!enemies.get(0).isDestroyed())
+				{
+					field.doSpawn(doSpawn(field.getTickCount(), centerX, centerY, enemies.get(0)));
+				}
 
 				this.tickDown = speed;
 			}
