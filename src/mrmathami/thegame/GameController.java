@@ -15,6 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -218,9 +219,10 @@ public final class GameController extends AnimationTimer {
 			// It means how many ms your game spend to update and then draw the game once.
 			// Draw it out mostly for debug
 			final double mspt = (System.nanoTime() - startNs) / 1000000.0;
-			graphicsContextCurrent.setFill(Color.BLACK);
-			graphicsContextCurrent.fillText(String.format("MSPT: %3.2f", mspt), 0, 12);
-			graphicsContextCurrent.fillText("Coins: " + field.getCoins(), 100, 12);
+			graphicsContextCurrent.setFill(Color.GOLD);
+			//graphicsContextCurrent.fillText(String.format("MSPT: %3.2f", mspt), 0, 12);
+            graphicsContextCurrent.setFont(new Font("Time New Roman", 60));
+			graphicsContextCurrent.fillText((int)(field.getCoins()) + "", 7*Config.TILE_SIZE + 5, 10*Config.TILE_SIZE - 12);
 
 			if(isChooseTower) {
 				double Xgoc = xMouse - Config.TILE_SIZE/2.0;
@@ -276,6 +278,15 @@ public final class GameController extends AnimationTimer {
 				canvasCurrent = canvasMainMenu;
 				graphicsContextCurrent = gcMainMenu;
 			}
+			if(isPause) {
+				try {
+					Image khungpause = new Image(new FileInputStream(".\\res\\image\\khungpause.png"));
+					khungpause = DeleteWhiteImage.deleteWhiteImage(khungpause);
+					graphicsContextCurrent.drawImage(khungpause, 375, 100);
+				}
+				catch (FileNotFoundException e) {}
+				stop();
+			}
 		}
 		else tick();
 
@@ -318,9 +329,6 @@ public final class GameController extends AnimationTimer {
 	public final void keyDownHandler(KeyEvent keyEvent) {
 		final KeyCode keyCode = keyEvent.getCode();
 		if (keyCode == KeyCode.W) {
-			scheduledFuture.cancel(true);
-			stop();
-			Platform.exit();
 		} else if (keyCode == KeyCode.S) {
 		} else if (keyCode == KeyCode.A) {
 		} else if (keyCode == KeyCode.D) {
@@ -358,6 +366,7 @@ public final class GameController extends AnimationTimer {
 	private boolean isChooseTower = false;
 	private String nameTower = "";
 	private boolean isChooseSell = false;
+	private boolean isPause = false;
 	final void mouseDownHandler(MouseEvent mouseEvent) {
 		Rectangle rectangleNormal = new Rectangle(0*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		Rectangle rectangleMachine = new Rectangle(1*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
@@ -380,11 +389,14 @@ public final class GameController extends AnimationTimer {
 		}
 		Rectangle rectanglePause = new Rectangle(15*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		if(rectanglePause.contains(mouseEvent.getX(), mouseEvent.getY())) {
-		    super.stop();
+		    isPause = true;
         }
-		Rectangle rectanglePlay = new Rectangle(14*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		Rectangle rectanglePlay = new Rectangle(472, 177, 172, 80);
 		if(rectanglePlay.contains(mouseEvent.getX(), mouseEvent.getY())) {
-		    super.start();
+		    if(isPause) {
+		    	isPause = false;
+		    	super.start();
+			}
         }
 		//		mouseEvent.getButton(); // which mouse button?
 //		// Screen coordinate. Remember to convert to field coordinate

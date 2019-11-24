@@ -161,7 +161,7 @@ public final class GameDrawer {
 				fieldStartPosX, fieldStartPosY, Config.SCREEN_WIDTH / fieldZoom, Config.SCREEN_HEIGHT / fieldZoom));
 		entities.sort(GameDrawer::entityDrawingOrderComparator);
 
-		graphicsContext.setFill(Color.WHITE);
+		graphicsContext.setFill(Color.LIGHTGREEN);
 		graphicsContext.fillRect(0.0, 0.0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 
 		GameEntity lastEntity = null;
@@ -180,6 +180,25 @@ public final class GameDrawer {
 			}
 		}
 		// Ve thap de mua tam thoi
+
+		try {
+			//Image khungduoi = new Image(new FileInputStream(".\\res\\image\\khung.png"));
+			//graphicsContext.drawImage(khungduoi, 0, 9*Config.TILE_SIZE);
+			Image sell = new Image(new FileInputStream(".\\res\\image\\yellowdollarsign.png"));
+			graphicsContext.drawImage(sell, 3*Config.TILE_SIZE, 9*Config.TILE_SIZE);
+			Image pause = new Image(new FileInputStream(".\\res\\image\\pause.png"));
+			pause = DeleteWhiteImage.deleteWhiteImage(pause);
+			graphicsContext.drawImage(pause, 15*Config.TILE_SIZE, 9*Config.TILE_SIZE);
+			Image tim = new Image(new FileInputStream(".\\res\\image\\tim.png"));
+			tim = DeleteWhiteImage.deleteWhiteImage(tim);
+			graphicsContext.drawImage(tim, 4*Config.TILE_SIZE, 9*Config.TILE_SIZE);
+			Image coin = new Image(new FileInputStream(".\\res\\image\\Coin.png"));
+			coin = DeleteWhiteImage.deleteWhiteImage(coin);
+			graphicsContext.drawImage(coin, 6*Config.TILE_SIZE, 9*Config.TILE_SIZE);
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("FileNotFoundException");
+		}
 		try
 		{
 			Image dollarSignImage  = new Image(new FileInputStream(".\\res\\image\\yellowdollarsign.png"));
@@ -193,18 +212,6 @@ public final class GameDrawer {
 		machineGunTowerDrawer.draw(gameField.getTickCount(), graphicsContext, new MachineGunTower(gameField.getTickCount(), 0, 0), Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		SniperTowerDrawer sniperTowerDrawer = new SniperTowerDrawer();
 		sniperTowerDrawer.draw(gameField.getTickCount(), graphicsContext, new SniperTower(gameField.getTickCount(), 0, 0), 2*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
-		try {
-			Image sell = new Image(new FileInputStream(".\\res\\image\\yellowdollarsign.png"));
-			graphicsContext.drawImage(sell, 3*Config.TILE_SIZE, 9*Config.TILE_SIZE);
-			Image pause = new Image(new FileInputStream(".\\res\\image\\pause.png"));
-			graphicsContext.drawImage(pause, 15*Config.TILE_SIZE, 9*Config.TILE_SIZE);
-			Image play = new Image(new FileInputStream(".\\res\\image\\play.png"));
-			graphicsContext.drawImage(play, 14*Config.TILE_SIZE, 9*Config.TILE_SIZE);
-		}
-		catch (FileNotFoundException e) {
-			System.out.println("FileNotFoundException");
-		}
-
 	}
 
 	public final double screenToFieldPosX(double screenPosX) {

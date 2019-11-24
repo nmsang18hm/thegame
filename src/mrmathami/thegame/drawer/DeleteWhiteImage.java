@@ -6,7 +6,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 
 public class DeleteWhiteImage {
-    private static final int TOLERANCE_THRESHOLD = 0xCF;
+    private static final int TOLERANCE_THRESHOLD = 0xFF;
 
     public static Image deleteWhiteImage(Image inputImage) {
         int W = (int) inputImage.getWidth();

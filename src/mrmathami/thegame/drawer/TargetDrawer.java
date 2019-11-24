@@ -3,6 +3,8 @@ package mrmathami.thegame.drawer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import mrmathami.thegame.Config;
 import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.tile.Target;
 
@@ -26,7 +28,8 @@ public final class TargetDrawer implements EntityDrawer {
 		catch (FileNotFoundException e) {
 			System.out.println("FileNotFoundException");
 		}
-		graphicsContext.setFill(Color.BLACK);
-		graphicsContext.fillText("Health: " + ((Target)entity).getHealth(), 200, 12);
+		graphicsContext.setFill(Color.RED);
+		graphicsContext.setFont(new Font("Time New Roman", 60));
+		graphicsContext.fillText(((Target)entity).getHealth() + "", 5* Config.TILE_SIZE + 5, 10*Config.TILE_SIZE - 12);
 	}
 }
