@@ -11,8 +11,11 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.FontSmoothingType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import mrmathami.thegame.drawer.*;
@@ -26,6 +29,7 @@ import mrmathami.thegame.entity.tile.tower.NormalTower;
 import mrmathami.thegame.entity.tile.tower.SniperTower;
 import mrmathami.utilities.ThreadFactoryBuilder;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -38,7 +42,6 @@ import java.util.concurrent.TimeUnit;
  * A game controller. Everything about the game should be managed in here.
  */
 public final class GameController extends AnimationTimer {
-    private Stage primaryStage;
 	public double xMouse;
 	public double yMouse;
 	/**
@@ -55,14 +58,19 @@ public final class GameController extends AnimationTimer {
 	/**
 	 * The screen to draw on. Just don't touch me. Google me if you are curious.
 	 */
-	private final GraphicsContext graphicsContext;
+	public Stage stageCurrent;
+	public GraphicsContext graphicsContextCurrent;
+	public Canvas canvasCurrent;
+	public Canvas canvasMainMenu;
+	public Scene sceneMainMenu;
+	public GraphicsContext gcMainMenu;
+	public GameController gameController = this;
 
 	/**
 	 * Game field. Contain everything in the current game field.
 	 * Responsible to update the field every tick.
 	 * Kinda advance, modify if you are sure about your change.
 	 */
-	private final Canvas canvas;
 
 	private GameField field;
 	/**
@@ -86,30 +94,94 @@ public final class GameController extends AnimationTimer {
 	/**
 	 * The constructor.
 	 *
-	 * @param graphicsContext the screen to draw on
+	 * @param //graphicsContext the screen to draw on
 	 */
-	public GameController(GraphicsContext graphicsContext, Canvas canvas,Stage primaryStage) {
-		// The screen to draw on
-		this.canvas = canvas;
-		this.primaryStage = primaryStage;
-		this.graphicsContext = graphicsContext;
+	public GameController(Stage primaryStage) {
+		stageCurrent = primaryStage;
 
-		// Just a few acronyms.
-		final long width = Config.TILE_HORIZONTAL;
-		final long height = Config.TILE_VERTICAL;
+		playBackgroundMusic();
 
-		// The game field. Please consider create another way to load a game field.
-		// TODO: I don't have much time, so, spawn some wall then :)
-		this.field = new GameField(GameStage.load("/stage/Man1.txt"));
+		stageCurrent.setTitle(Config.GAME_NAME);
+		canvasMainMenu = new Canvas(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+		StackPane stackPaneMainMenu = new StackPane();
+		stackPaneMainMenu.getChildren().add(canvasMainMenu);
+		sceneMainMenu = new Scene(stackPaneMainMenu);
+		canvasCurrent = canvasMainMenu;
+		stageCurrent.setScene(sceneMainMenu);
+		gcMainMenu = canvasMainMenu.getGraphicsContext2D();
+		graphicsContextCurrent = gcMainMenu;
+		try {
+			Image imageMainMenu = new Image(new FileInputStream(".\\res\\image\\MainMenu.png"));
+			gcMainMenu.drawImage(imageMainMenu, 0, 0);
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("Main Menu image not found");
+		}
+		stageCurrent.show();
 
-		// The drawer. Nothing fun here.
-		this.drawer = new GameDrawer(graphicsContext, field);
+		Rectangle rectanglePlay = new Rectangle(404, 171, 316, 126);
+		canvasMainMenu.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				if(rectanglePlay.contains(mouseEvent.getX(), mouseEvent.getY())) {
+					canvasCurrent = new Canvas(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+					graphicsContextCurrent = canvasCurrent.getGraphicsContext2D();
 
-		// Field view region is a rectangle region
-		// [(posX, posY), (posX + SCREEN_WIDTH / zoom, posY + SCREEN_HEIGHT / zoom)]
-		// that the drawer will select and draw everything in it in an self-defined order.
-		// Can be modified to support zoom in / zoom out of the map.
-		drawer.setFieldViewRegion(0.0, 0.0, Config.TILE_SIZE);
+					canvasCurrent.setFocusTraversable(true);
+					graphicsContextCurrent.setFontSmoothingType(FontSmoothingType.LCD);
+
+
+					// keyboard and mouse events to catch. Add if you need more
+					canvasCurrent.setOnKeyPressed(gameController::keyDownHandler);
+					canvasCurrent.setOnKeyReleased(gameController::keyUpHandler);
+					//		canvas.setOnKeyTyped(...);
+
+					canvasCurrent.setOnMousePressed(gameController::mouseDownHandler);
+					//canvas.setOnMouseDragged(gameController::mouseMovedHandler);
+					canvasCurrent.setOnMouseReleased(gameController::mouseUpHandler);
+					//		canvas.setOnMouseClicked(...);
+
+
+					stageCurrent.setResizable(false);
+					stageCurrent.setOnCloseRequest(gameController::closeRequestHandler);
+					stageCurrent.setScene(new Scene(new StackPane(canvasCurrent)));
+					stageCurrent.show();
+
+					// Just a few acronyms.
+					final long width = Config.TILE_HORIZONTAL;
+					final long height = Config.TILE_VERTICAL;
+
+					// The game field. Please consider create another way to load a game field.
+					// TODO: I don't have much time, so, spawn some wall then :)
+					gameController.field = new GameField(GameStage.load("/stage/Man1.txt"));
+
+					// The drawer. Nothing fun here.
+					gameController.drawer = new GameDrawer(graphicsContextCurrent, field);
+
+					// Field view region is a rectangle region
+					// [(posX, posY), (posX + SCREEN_WIDTH / zoom, posY + SCREEN_HEIGHT / zoom)]
+					// that the drawer will select and draw everything in it in an self-defined order.
+					// Can be modified to support zoom in / zoom out of the map.
+					drawer.setFieldViewRegion(0.0, 0.0, Config.TILE_SIZE);
+					start();
+				}
+			}
+		});
+
+	}
+
+
+	void playBackgroundMusic()
+	{
+
+		File sound = new File("./res/sound/nhacNenChinh.mp3");
+		AudioClip clip = new AudioClip(sound.toURI().toString());
+		clip.setCycleCount(10000);
+		clip.play();
+//		MediaPlayer player = new MediaPlayer(new Media(soun.toURI().toString()));
+//		player.setStartTime(Duration.seconds(0));
+//		player.setStopTime(Duration.hours(1000));
+//		player.play();
 	}
 
 	/**
@@ -131,80 +203,82 @@ public final class GameController extends AnimationTimer {
 		// don't touch me.
 		final long currentTick = tick;
 		final long startNs = System.nanoTime();
+		if(graphicsContextCurrent != gcMainMenu) {
+			// do a tick, as fast as possible
+			field.tick();
 
-		// do a tick, as fast as possible
-		field.tick();
+			// if it's too late to draw a new frame, skip it.
+			// make the game feel really laggy, so...
+			if (currentTick != tick) return;
 
-//		// if it's too late to draw a new frame, skip it.
-//		// make the game feel really laggy, so...
-//		if (currentTick != tick) return;
+			// draw a new frame, as fast as possible.
+			drawer.render();
 
-		// draw a new frame, as fast as possible.
-		drawer.render();
+			// MSPT display. MSPT stand for Milliseconds Per Tick.
+			// It means how many ms your game spend to update and then draw the game once.
+			// Draw it out mostly for debug
+			final double mspt = (System.nanoTime() - startNs) / 1000000.0;
+			graphicsContextCurrent.setFill(Color.BLACK);
+			graphicsContextCurrent.fillText(String.format("MSPT: %3.2f", mspt), 0, 12);
+			graphicsContextCurrent.fillText("Coins: " + field.getCoins(), 100, 12);
 
-		// MSPT display. MSPT stand for Milliseconds Per Tick.
-		// It means how many ms your game spend to update and then draw the game once.
-		// Draw it out mostly for debug
-		final double mspt = (System.nanoTime() - startNs) / 1000000.0;
-		graphicsContext.setFill(Color.BLACK);
-		graphicsContext.fillText(String.format("MSPT: %3.2f", mspt), 0, 12);
-		graphicsContext.fillText("Coins: " + field.getCoins(), 100, 12);
-
-		if(isChooseTower) {
-			double Xgoc = xMouse - Config.TILE_SIZE/2.0;
-			double Ygoc = yMouse - Config.TILE_SIZE/2.0;
-			if(nameTower == "NormalTower") {
-				NormalTowerDrawer normalTowerDrawer = new NormalTowerDrawer();
-				normalTowerDrawer.draw(field.getTickCount(), graphicsContext, new NormalTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+			if(isChooseTower) {
+				double Xgoc = xMouse - Config.TILE_SIZE/2.0;
+				double Ygoc = yMouse - Config.TILE_SIZE/2.0;
+				if(nameTower == "NormalTower") {
+					NormalTowerDrawer normalTowerDrawer = new NormalTowerDrawer();
+					normalTowerDrawer.draw(field.getTickCount(), graphicsContextCurrent, new NormalTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+				}
+				else if(nameTower == "MachineTower") {
+					MachineGunTowerDrawer machineGunTowerDrawer = new MachineGunTowerDrawer();
+					machineGunTowerDrawer.draw(field.getTickCount(), graphicsContextCurrent, new MachineGunTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+				}
+				else if (nameTower == "SniperTower") {
+					SniperTowerDrawer sniperTowerDrawer = new SniperTowerDrawer();
+					sniperTowerDrawer.draw(field.getTickCount(), graphicsContextCurrent, new SniperTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+				}
 			}
-			else if(nameTower == "MachineTower") {
-				MachineGunTowerDrawer machineGunTowerDrawer = new MachineGunTowerDrawer();
-				machineGunTowerDrawer.draw(field.getTickCount(), graphicsContext, new MachineGunTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+			else if(isChooseSell) {
+				double Xgoc1 = xMouse - Config.TILE_SIZE/2.0;
+				double Ygoc1 = yMouse - Config.TILE_SIZE/2.0;
+				try {
+
+					Image image = new Image(new FileInputStream(".\\res\\image\\yellowdollarsign.png"));
+					image = DeleteWhiteImage.deleteWhiteImage(image);
+					graphicsContextCurrent.drawImage(image, Xgoc1, Ygoc1);
+				}
+				catch (FileNotFoundException e) {
+
+				}
 			}
-			else if (nameTower == "SniperTower") {
-				SniperTowerDrawer sniperTowerDrawer = new SniperTowerDrawer();
-				sniperTowerDrawer.draw(field.getTickCount(), graphicsContext, new SniperTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+			else {
+				xMouse = 9999;
+				xMouse = 9999;
+			}
+
+			canvasCurrent.setOnMouseDragged(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent mouseEvent) {
+					xMouse = mouseEvent.getX();
+					yMouse = mouseEvent.getY();
+				}
+			});
+			boolean isHaveTarget = false;
+			boolean isHaveSpawner = false;
+			for(GameEntity entity : field.getEntities()) {
+				if(entity instanceof Target) isHaveTarget = true;
+				else if(entity instanceof AbstractSpawner) isHaveSpawner = true;
+			}
+
+			if(isHaveSpawner == false || isHaveTarget == false)
+			{
+				stageCurrent.setScene(sceneMainMenu);
+				canvasCurrent = canvasMainMenu;
+				graphicsContextCurrent = gcMainMenu;
 			}
 		}
-		else if(isChooseSell) {
-            double Xgoc1 = xMouse - Config.TILE_SIZE/2.0;
-            double Ygoc1 = yMouse - Config.TILE_SIZE/2.0;
-            try {
+		else tick();
 
-                Image image = new Image(new FileInputStream(".\\res\\image\\yellowdollarsign.png"));
-                image = DeleteWhiteImage.deleteWhiteImage(image);
-                graphicsContext.drawImage(image, Xgoc1, Ygoc1);
-            }
-            catch (FileNotFoundException e) {
-
-            }
-        }
-		else {
-                xMouse = 9999;
-                xMouse = 9999;
-		}
-
-		canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent mouseEvent) {
-				xMouse = mouseEvent.getX();
-				yMouse = mouseEvent.getY();
-			}
-		});
-		boolean isHaveTarget = false;
-		boolean isHaveSpawner = false;
-		for(GameEntity entity : field.getEntities()) {
-			if(entity instanceof Target) isHaveTarget = true;
-			else if(entity instanceof AbstractSpawner) isHaveSpawner = true;
-		}
-
-		if(isHaveSpawner == false || isHaveTarget == false)
-		{
-            primaryStage.close();
-
-
-			//System.exit(0);
-		}
 
 		// if we have time to spend, do a spin
 		while (currentTick == tick) Thread.onSpinWait();
@@ -241,9 +315,12 @@ public final class GameController extends AnimationTimer {
 	 *
 	 * @param keyEvent the key that you press down
 	 */
-	final void keyDownHandler(KeyEvent keyEvent) {
+	public final void keyDownHandler(KeyEvent keyEvent) {
 		final KeyCode keyCode = keyEvent.getCode();
-		if (keyCode == KeyCode.W) { Platform.exit();
+		if (keyCode == KeyCode.W) {
+			scheduledFuture.cancel(true);
+			stop();
+			Platform.exit();
 		} else if (keyCode == KeyCode.S) {
 		} else if (keyCode == KeyCode.A) {
 		} else if (keyCode == KeyCode.D) {
