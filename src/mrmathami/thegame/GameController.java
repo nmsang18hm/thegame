@@ -213,7 +213,7 @@ public final class GameController extends AnimationTimer {
 	 */
 	final void keyDownHandler(KeyEvent keyEvent) {
 		final KeyCode keyCode = keyEvent.getCode();
-		if (keyCode == KeyCode.W) {
+		if (keyCode == KeyCode.W) { Platform.exit();
 		} else if (keyCode == KeyCode.S) {
 		} else if (keyCode == KeyCode.A) {
 		} else if (keyCode == KeyCode.D) {
