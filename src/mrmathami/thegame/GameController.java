@@ -65,6 +65,9 @@ public final class GameController extends AnimationTimer {
 	public Canvas canvasMainMenu;
 	public Scene sceneMainMenu;
 	public GraphicsContext gcMainMenu;
+	public Canvas canvasChooseStage;
+	public Scene sceneChooseStage;
+	public GraphicsContext gcChooseStage;
 	public GameController gameController = this;
 
 	/**
@@ -120,12 +123,48 @@ public final class GameController extends AnimationTimer {
 		}
 		stageCurrent.show();
 
+		canvasChooseStage = new Canvas(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+		StackPane stackPaneChooseStage = new StackPane();
+		stackPaneChooseStage.getChildren().add(canvasChooseStage);
+		sceneChooseStage = new Scene(stackPaneChooseStage);
+		gcChooseStage = canvasChooseStage.getGraphicsContext2D();
+
 		Rectangle rectanglePlay = new Rectangle(404, 171, 316, 126);
 		Rectangle rectangleQuit = new Rectangle(404, 483, 316, 126);
 		canvasMainMenu.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
 				if(rectanglePlay.contains(mouseEvent.getX(), mouseEvent.getY())) {
+					stageCurrent.setScene(sceneChooseStage);
+					canvasCurrent = canvasChooseStage;
+					graphicsContextCurrent = gcChooseStage;
+					try {
+						Image imageMainMenu = new Image(new FileInputStream(".\\res\\image\\chonman.png"));
+						gcChooseStage.drawImage(imageMainMenu, 0, 0);
+					}
+					catch (FileNotFoundException e) {
+						System.out.println("Main Menu image not found");
+					}
+					gcChooseStage.setFont(new Font("Time New Roma", 15));
+					gcChooseStage.fillText("Màn 1", 230, 135);
+					gcChooseStage.setFont(new Font("Time New Roma", 50));
+					gcChooseStage.fillText("Stage Select", 425, 63);
+					stageCurrent.show();
+				}
+				else if(rectangleQuit.contains(mouseEvent.getX(), mouseEvent.getY())) {
+					//scheduledFuture.cancel(true);
+					stop();
+					Platform.exit();
+					System.exit(0);
+				}
+			}
+		});
+		Rectangle rectangleMan1 = new Rectangle(148, 141, 205, 90);
+		canvasChooseStage.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				System.out.println(mouseEvent.getX() + " " + mouseEvent.getY());
+				if(rectangleMan1.contains(mouseEvent.getX(), mouseEvent.getY())) {
 					canvasCurrent = new Canvas(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 					graphicsContextCurrent = canvasCurrent.getGraphicsContext2D();
 
@@ -167,15 +206,8 @@ public final class GameController extends AnimationTimer {
 					drawer.setFieldViewRegion(0.0, 0.0, Config.TILE_SIZE);
 					start();
 				}
-				else if(rectangleQuit.contains(mouseEvent.getX(), mouseEvent.getY())) {
-					//scheduledFuture.cancel(true);
-					stop();
-					Platform.exit();
-					System.exit(0);
-				}
 			}
 		});
-
 	}
 
 
@@ -281,9 +313,11 @@ public final class GameController extends AnimationTimer {
 
 			if(isHaveSpawner == false || isHaveTarget == false)
 			{
+				isPause = false;
 				stageCurrent.setScene(sceneMainMenu);
 				canvasCurrent = canvasMainMenu;
 				graphicsContextCurrent = gcMainMenu;
+				stop();
 			}
 			if(isPause) {
 				try {
@@ -296,7 +330,6 @@ public final class GameController extends AnimationTimer {
 			}
 		}
 		else tick();
-
 
 		// if we have time to spend, do a spin
 		while (currentTick == tick) Thread.onSpinWait();
@@ -379,6 +412,10 @@ public final class GameController extends AnimationTimer {
 		Rectangle rectangleMachine = new Rectangle(1*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		Rectangle rectangleSniper = new Rectangle(2*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		Rectangle rectangleSell = new Rectangle(3*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		Rectangle rectanglePause = new Rectangle(15*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		Rectangle rectangleResume = new Rectangle(472, 177, 172, 80);
+		Rectangle rectangleExit = new Rectangle(472, 456, 172, 80);
+
 		if(rectangleNormal.contains(mouseEvent.getX(),mouseEvent.getY())) {
 			nameTower = "NormalTower";
 			isChooseTower = true;
@@ -393,18 +430,21 @@ public final class GameController extends AnimationTimer {
 		}
 		else if(rectangleSell.contains(mouseEvent.getX(), mouseEvent.getY())) {
 			isChooseSell = true;
-		}
-		Rectangle rectanglePause = new Rectangle(15*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
-		if(rectanglePause.contains(mouseEvent.getX(), mouseEvent.getY())) {
+		} else if(rectanglePause.contains(mouseEvent.getX(), mouseEvent.getY())) {
 		    isPause = true;
-        }
-		Rectangle rectanglePlay = new Rectangle(472, 177, 172, 80);
-		if(rectanglePlay.contains(mouseEvent.getX(), mouseEvent.getY())) {
+        }else if(rectangleResume.contains(mouseEvent.getX(), mouseEvent.getY())) {
 		    if(isPause) {
 		    	isPause = false;
 		    	super.start();
 			}
-        }
+        } else if(rectangleExit.contains(mouseEvent.getX(), mouseEvent.getY())) {
+			if(isPause) {
+				isPause = false;
+				stageCurrent.setScene(sceneMainMenu);
+				stop();
+			}
+		}
+
 
 		//		mouseEvent.getButton(); // which mouse button?
 //		// Screen coordinate. Remember to convert to field coordinate
