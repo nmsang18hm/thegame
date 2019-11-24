@@ -8,7 +8,7 @@ public final class Config {
 	/**
 	 * Ticks per second
 	 */
-	public static final long GAME_TPS = 20;
+	public static final long GAME_TPS = 30;
 	/**
 	 * Nanoseconds per tick
 	 */

@@ -196,10 +196,15 @@ public final class GameDrawer {
 		try {
 			Image sell = new Image(new FileInputStream(".\\res\\image\\yellowdollarsign.png"));
 			graphicsContext.drawImage(sell, 3*Config.TILE_SIZE, 9*Config.TILE_SIZE);
+			Image pause = new Image(new FileInputStream(".\\res\\image\\pause.png"));
+			graphicsContext.drawImage(pause, 15*Config.TILE_SIZE, 9*Config.TILE_SIZE);
+			Image play = new Image(new FileInputStream(".\\res\\image\\play.png"));
+			graphicsContext.drawImage(play, 14*Config.TILE_SIZE, 9*Config.TILE_SIZE);
 		}
 		catch (FileNotFoundException e) {
 			System.out.println("FileNotFoundException");
 		}
+
 	}
 
 	public final double screenToFieldPosX(double screenPosX) {

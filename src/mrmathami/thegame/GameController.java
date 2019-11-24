@@ -4,8 +4,10 @@ package mrmathami.thegame;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -13,18 +15,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import mrmathami.thegame.drawer.GameDrawer;
-import mrmathami.thegame.drawer.MachineGunTowerDrawer;
-import mrmathami.thegame.drawer.NormalTowerDrawer;
-import mrmathami.thegame.drawer.SniperTowerDrawer;
+import mrmathami.thegame.drawer.*;
 import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.tile.Mountain;
+import mrmathami.thegame.entity.tile.Target;
+import mrmathami.thegame.entity.tile.spawner.AbstractSpawner;
 import mrmathami.thegame.entity.tile.tower.AbstractTower;
 import mrmathami.thegame.entity.tile.tower.MachineGunTower;
 import mrmathami.thegame.entity.tile.tower.NormalTower;
 import mrmathami.thegame.entity.tile.tower.SniperTower;
 import mrmathami.utilities.ThreadFactoryBuilder;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -35,6 +38,7 @@ import java.util.concurrent.TimeUnit;
  * A game controller. Everything about the game should be managed in here.
  */
 public final class GameController extends AnimationTimer {
+    private Stage primaryStage;
 	public double xMouse;
 	public double yMouse;
 	/**
@@ -52,8 +56,6 @@ public final class GameController extends AnimationTimer {
 	 * The screen to draw on. Just don't touch me. Google me if you are curious.
 	 */
 	private final GraphicsContext graphicsContext;
-
-	private final Stage stage;
 
 	/**
 	 * Game field. Contain everything in the current game field.
@@ -86,10 +88,10 @@ public final class GameController extends AnimationTimer {
 	 *
 	 * @param graphicsContext the screen to draw on
 	 */
-	public GameController(GraphicsContext graphicsContext, Canvas canvas, Stage stage) {
+	public GameController(GraphicsContext graphicsContext, Canvas canvas,Stage primaryStage) {
 		// The screen to draw on
-		this.stage = stage;
 		this.canvas = canvas;
+		this.primaryStage = primaryStage;
 		this.graphicsContext = graphicsContext;
 
 		// Just a few acronyms.
@@ -164,9 +166,22 @@ public final class GameController extends AnimationTimer {
 				sniperTowerDrawer.draw(field.getTickCount(), graphicsContext, new SniperTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 			}
 		}
+		else if(isChooseSell) {
+            double Xgoc1 = xMouse - Config.TILE_SIZE/2.0;
+            double Ygoc1 = yMouse - Config.TILE_SIZE/2.0;
+            try {
+
+                Image image = new Image(new FileInputStream(".\\res\\image\\yellowdollarsign.png"));
+                image = DeleteWhiteImage.deleteWhiteImage(image);
+                graphicsContext.drawImage(image, Xgoc1, Ygoc1);
+            }
+            catch (FileNotFoundException e) {
+
+            }
+        }
 		else {
-			xMouse = 9999;
-			xMouse = 9999;
+                xMouse = 9999;
+                xMouse = 9999;
 		}
 
 		canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
@@ -176,6 +191,20 @@ public final class GameController extends AnimationTimer {
 				yMouse = mouseEvent.getY();
 			}
 		});
+		boolean isHaveTarget = false;
+		boolean isHaveSpawner = false;
+		for(GameEntity entity : field.getEntities()) {
+			if(entity instanceof Target) isHaveTarget = true;
+			else if(entity instanceof AbstractSpawner) isHaveSpawner = true;
+		}
+
+		if(isHaveSpawner == false || isHaveTarget == false)
+		{
+            primaryStage.close();
+
+
+			//System.exit(0);
+		}
 
 		// if we have time to spend, do a spin
 		while (currentTick == tick) Thread.onSpinWait();
@@ -191,6 +220,7 @@ public final class GameController extends AnimationTimer {
 		this.scheduledFuture = SCHEDULER.scheduleAtFixedRate(this::tick, 0, Config.GAME_NSPT, TimeUnit.NANOSECONDS);
 		// start the JavaFX loop.
 		super.start();
+
 	}
 
 	/**
@@ -271,6 +301,14 @@ public final class GameController extends AnimationTimer {
 		else if(rectangleSell.contains(mouseEvent.getX(), mouseEvent.getY())) {
 			isChooseSell = true;
 		}
+		Rectangle rectanglePause = new Rectangle(15*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		if(rectanglePause.contains(mouseEvent.getX(), mouseEvent.getY())) {
+		    super.stop();
+        }
+		Rectangle rectanglePlay = new Rectangle(14*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+		if(rectanglePlay.contains(mouseEvent.getX(), mouseEvent.getY())) {
+		    super.start();
+        }
 		//		mouseEvent.getButton(); // which mouse button?
 //		// Screen coordinate. Remember to convert to field coordinate
 //		drawer.screenToFieldPosX(mouseEvent.getX());
@@ -332,5 +370,6 @@ public final class GameController extends AnimationTimer {
 //		drawer.screenToFieldPosX(mouseEvent.getX());
 //		drawer.screenToFieldPosY(mouseEvent.getY());
 	}
+
 
 }

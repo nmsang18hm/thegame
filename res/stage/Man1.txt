@@ -8,7 +8,7 @@
 1 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1
 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1
 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1
-Target 0 7 1 2 20
+Target 0 7 1 2 1
 NormalSpawner 0 1 2 2 45 90 20
 SmallerSpawner 0 1 2 2 30 300 30
 TankerSpawner 0 1 2 2 60 600 5
