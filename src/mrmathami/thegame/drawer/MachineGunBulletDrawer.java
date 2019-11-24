@@ -32,7 +32,7 @@ public final class MachineGunBulletDrawer implements EntityDrawer {
 		//graphicsContext.fillOval(screenPosX, screenPosY, screenWidth, screenHeight);
 		try {
 			Image image = new Image(new FileInputStream(".\\res\\image\\MachineBullet.png"));
-			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);
+			Image image1 = DeleteWhiteImage.deleteWhiteImage2(image);
 			graphicsContext.drawImage(image1, screenPosX, screenPosY);
 		}
 		catch (FileNotFoundException e) {

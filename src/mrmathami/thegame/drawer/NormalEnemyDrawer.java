@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
+import mrmathami.thegame.Config;
 import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.enemy.AbstractEnemy;
 
@@ -23,7 +24,7 @@ public final class NormalEnemyDrawer implements EntityDrawer {
 		try {
 			AbstractEnemy enemy = (AbstractEnemy) entity;
 			graphicsContext.setFill(Color.GREEN);
-			graphicsContext.fillRect(screenPosX +9, screenPosY -20,enemy.getHealth() / 8,14);
+			graphicsContext.fillRect(screenPosX, screenPosY -20, Config.NORMAL_ENEMY_SIZE*Config.TILE_SIZE,14);
 			Image image = new Image(new FileInputStream(".\\res\\image\\NormalEnemy.png"));
 			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);
 			graphicsContext.drawImage(image1, screenPosX, screenPosY);

@@ -3,6 +3,7 @@ package mrmathami.thegame.drawer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import mrmathami.thegame.Config;
 import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.enemy.AbstractEnemy;
 
@@ -18,7 +19,7 @@ public final class SmallerEnemyDrawer implements EntityDrawer {
 		try {
 			AbstractEnemy enemy = (AbstractEnemy) entity;
 			graphicsContext.setFill(Color.GREEN);
-			graphicsContext.fillRect(screenPosX +9, screenPosY -20,enemy.getHealth() / 8,14);
+			graphicsContext.fillRect(screenPosX, screenPosY -20, Config.SMALLER_ENEMY_SIZE*Config.TILE_SIZE,14);
 
 			Image image = new Image(new FileInputStream(".\\res\\image\\SmallerEnemy.png"));
 			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);

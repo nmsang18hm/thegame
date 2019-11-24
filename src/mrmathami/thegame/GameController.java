@@ -121,6 +121,7 @@ public final class GameController extends AnimationTimer {
 		stageCurrent.show();
 
 		Rectangle rectanglePlay = new Rectangle(404, 171, 316, 126);
+		Rectangle rectangleQuit = new Rectangle(404, 483, 316, 126);
 		canvasMainMenu.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
@@ -165,6 +166,12 @@ public final class GameController extends AnimationTimer {
 					// Can be modified to support zoom in / zoom out of the map.
 					drawer.setFieldViewRegion(0.0, 0.0, Config.TILE_SIZE);
 					start();
+				}
+				else if(rectangleQuit.contains(mouseEvent.getX(), mouseEvent.getY())) {
+					//scheduledFuture.cancel(true);
+					stop();
+					Platform.exit();
+					System.exit(0);
 				}
 			}
 		});
@@ -398,6 +405,7 @@ public final class GameController extends AnimationTimer {
 		    	super.start();
 			}
         }
+
 		//		mouseEvent.getButton(); // which mouse button?
 //		// Screen coordinate. Remember to convert to field coordinate
 //		drawer.screenToFieldPosX(mouseEvent.getX());
