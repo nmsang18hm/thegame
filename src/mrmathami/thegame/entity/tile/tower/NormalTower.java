@@ -13,21 +13,16 @@ import java.io.File;
 public final class NormalTower extends AbstractTower<NormalBullet> {
 	static  File sound = new File("./res/sound/normalTower.mp3");
 
-	static void playSoundEffect()
-	{
-		AudioClip audioClip = new AudioClip(sound.toURI().toString());
-		audioClip.setCycleCount(1);
-		audioClip.play();
 
-	}
 	public NormalTower(long createdTick, long posX, long posY) {
 		super(createdTick, posX, posY, Config.NORMAL_TOWER_RANGE, Config.NORMAL_TOWER_SPEED);
+		super.setTowerName("NormalTower");
 	}
 
 	@Nonnull
 	@Override
 	protected final NormalBullet doSpawn(long createdTick, double posX, double posY, AbstractEnemy target) {
-		playSoundEffect();
+		playSoundEffect(sound);
 		return new NormalBullet(createdTick, posX, posY, target);
 	}
 }

@@ -22,6 +22,8 @@ public final class GameField {
 	 * Field height
 	 */
 	private final double height;
+
+	private final double numOfTitles;
 	/**
 	 * Field tick count
 	 */
@@ -32,12 +34,17 @@ public final class GameField {
 	public GameField(@Nonnull GameStage gameStage) {
 		this.width = gameStage.getWidth();
 		this.height = gameStage.getHeight();
+		this.numOfTitles = gameStage.getNumOfTitles();
 		this.tickCount = 0;
 		entities.addAll(gameStage.getEntities());
 		// Tam thoi coin ban dau la 100
 		this.coins = 100;
 	}
 
+	public final  double getNumOfTitles()
+	{
+		return numOfTitles;
+	}
 	public final double getWidth() {
 		return width;
 	}

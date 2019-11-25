@@ -25,17 +25,26 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 	private long armor;
 	private double speed;
 	private long reward;
+	private String EnemyName;
+	private long MaxHealth;
 
 	protected AbstractEnemy(long createdTick, double posX, double posY, double size, long health, long armor, double speed, long reward) {
 		super(createdTick, posX, posY, size, size);
+		this.MaxHealth = health;
 		this.health = health;
 		this.armor = armor;
 		this.speed = speed;
 		this.reward = reward;
+		EnemyName = "";
 	}
 
+	public long getMaxHealth() {
+		return MaxHealth;
+	}
+
+
 	private static double evaluateDistance(@Nonnull Collection<GameEntity> overlappableEntities,
-			@Nonnull GameEntity sourceEntity, double posX, double posY, double width, double height) {
+										   @Nonnull GameEntity sourceEntity, double posX, double posY, double width, double height) {
 		double distance = 0.0;
 		double sumArea = 0.0;
 		for (GameEntity entity : GameEntities.getOverlappedEntities(overlappableEntities, posX, posY, width, height)) {
@@ -67,6 +76,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 			for (double[] deltaDirection : DELTA_DIRECTION_ARRAY) {
 				final double currentPosX = enemyPosX + deltaDirection[0] * realSpeed;
 				final double currentPosY = enemyPosY + deltaDirection[1] * realSpeed;
+				System.out.println("currentPosX: " + currentPosX +",currentPosY: "+currentPosY);
 				final double currentDistance = evaluateDistance(overlappableEntities, this, currentPosX, currentPosY, enemyWidth, enemyHeight);
 				if (currentDistance < minimumDistance) {
 					minimumDistance = currentDistance;
@@ -135,5 +145,13 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 	@Override
 	public final boolean isDestroyed() {
 		return health <= 0L;
+	}
+
+	public String getEnemyName() {
+		return EnemyName;
+	}
+
+	public void setEnemyName(String enemyName) {
+		EnemyName = enemyName;
 	}
 }

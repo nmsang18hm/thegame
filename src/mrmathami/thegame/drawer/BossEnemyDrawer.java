@@ -19,7 +19,7 @@ public final class BossEnemyDrawer implements EntityDrawer {
 		try {
 			AbstractEnemy enemy = (AbstractEnemy) entity;
 			graphicsContext.setFill(Color.GREEN);
-			graphicsContext.fillRect(screenPosX, screenPosY -20, ((double)enemy.getHealth()/(double)Config.BOSS_ENEMY_SIZE)*Config.TILE_SIZE,14);
+			graphicsContext.fillRect(screenPosX, screenPosY -20, ((double)enemy.getHealth()/(double)Config.BOSS_ENEMY_HEALTH)*Config.TILE_SIZE,14);
 
 			Image image = new Image(new FileInputStream(".\\res\\image\\BossEnemy.png"));
 			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);

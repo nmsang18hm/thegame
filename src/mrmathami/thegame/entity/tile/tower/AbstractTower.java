@@ -1,5 +1,6 @@
 package mrmathami.thegame.entity.tile.tower;
 
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import mrmathami.thegame.GameEntities;
@@ -17,6 +18,7 @@ import java.util.List;
 public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTile implements UpdatableEntity {
 	private final double range;
 	private final long speed;
+	private String TowerName;
 
 	private long tickDown;
 
@@ -26,6 +28,23 @@ public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTi
 		this.range = range;
 		this.speed = speed;
 		this.tickDown = 0;
+		this.TowerName = "";
+	}
+
+	public String getTowerName() {
+		return TowerName;
+	}
+
+	public void setTowerName(String towerName) {
+		TowerName = towerName;
+	}
+
+	void playSoundEffect(File sound)
+	{
+		AudioClip audioClip = new AudioClip(sound.toURI().toString());
+		audioClip.setCycleCount(1);
+		audioClip.play();
+
 	}
 
 	@Override

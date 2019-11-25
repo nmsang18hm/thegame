@@ -16,13 +16,28 @@ import java.util.*;
 public final class GameStage {
 	private final long width;
 	private final long height;
+	private final long numOfTitles;
+	public static List<List<Integer>> map = new ArrayList<List<Integer>>();
+
 	@Nonnull
 	private final List<GameEntity> entities;
 
-	private GameStage(long width, long height, @Nonnull List<GameEntity> entities) {
+	private GameStage(long width, long height, long numOfTitles,@Nonnull List<GameEntity> entities) {
 		this.width = width;
 		this.height = height;
+		this.numOfTitles = numOfTitles;
+		System.out.println("Width: " + width + ",Height: " + height + ",Num of Titles: " + numOfTitles);
+
 		this.entities = List.copyOf(entities);
+		for(int i =0; i < map.size(); i++)
+		{
+			for(int j =0; j < map.get(i).size();j++)
+			{
+				System.out.print(map.get(i).get(j) +" ");
+			}
+			System.out.println();
+		}
+
 	}
 
 	@Nullable
@@ -36,12 +51,15 @@ public final class GameStage {
 				final int numOfTiles = scanner.nextInt();
 				final List<GameEntity> entities = new ArrayList<>(width * height + numOfTiles);
 				for (int y = 0; y < height; y++) {
+					map.add(new ArrayList<Integer>());
 					for (int x = 0; x < width; x++) {
 						final int value = scanner.nextInt();
 						if (value == 0) {
+							map.get(y).add(0);
 							entities.add(new Road(0, x, y));
 						} else if (value == 1) {
 							entities.add(new Mountain(0, x, y));
+							map.get(y).add(1);
 						} else {
 							throw new InputMismatchException("Unexpected value! Input value: " + value);
 						}
@@ -144,7 +162,7 @@ public final class GameStage {
 					}
 				}
 
-				return new GameStage(width, height, entities);
+				return new GameStage(width, height,numOfTiles, entities);
 			} catch (NoSuchElementException e) {
 				throw new IOException("Resource invalid! Resource name: " + name, e);
 			}
@@ -165,6 +183,11 @@ public final class GameStage {
 	public final long getHeight() {
 		return height;
 	}
+
+	public final long getNumOfTitles() {
+		return numOfTitles;
+	}
+
 
 	@Nonnull
 	public final List<GameEntity> getEntities() {

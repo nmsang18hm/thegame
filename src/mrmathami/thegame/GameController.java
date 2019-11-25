@@ -19,8 +19,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Builder;
 import mrmathami.thegame.drawer.*;
 import mrmathami.thegame.entity.GameEntity;
+import mrmathami.thegame.entity.enemy.AbstractEnemy;
 import mrmathami.thegame.entity.tile.Mountain;
 import mrmathami.thegame.entity.tile.Target;
 import mrmathami.thegame.entity.tile.spawner.AbstractSpawner;
@@ -208,7 +210,30 @@ public final class GameController extends AnimationTimer {
 			}
 		});
 	}
-
+//	public void saveGame()
+//	{
+//		StringBuilder builder = new StringBuilder();
+//		double width = field.getWidth();
+//		double height = field.getHeight();
+//		double numOfTitles = field.getNumOfTitles();
+//		builder.append(width + " " + height +" " + numOfTitles +"\n");
+//		for(int i =0; i < GameStage.map.size(); i++)
+//		{
+//			for(int j =0; j < GameStage.map.get(i).size())
+//			{
+//				builder.append(GameStage.map.get(i).get(j) + " ");
+//			}
+//			builder.append("\n");
+//		}
+//		for(GameEntity entity : field.getEntities())
+//		{
+//			if(entity instanceof AbstractEnemy)
+//			{
+//				AbstractEnemy enemy = (AbstractEnemy) entity;
+//				builder.append("%s %s",enemy.getEnemyName(),enemy.getHealth(),enemy.getPosX(),enemy.getPosY())
+//			}
+//		}
+//	}
 
 	void playBackgroundMusic()
 	{

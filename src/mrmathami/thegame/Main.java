@@ -19,24 +19,28 @@ import javafx.scene.text.FontSmoothingType;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
 import java.io.File;
+import java.io.FileWriter;
 import java.lang.InterruptedException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Main class. Entry point of the game.
  */
 public final class Main extends Application {
-	public static void main(String[] args) {
-		Application.launch(args);
-	}
+    public static void main(String[] args) {
+		launch(args);
+
+    }
 
 
 
-	@Override
-	public void start(Stage primaryStage) {
+    @Override
+    public void start(Stage primaryStage) {
         final GameController gameController = new GameController(primaryStage);
-	}
+    }
 
 }
