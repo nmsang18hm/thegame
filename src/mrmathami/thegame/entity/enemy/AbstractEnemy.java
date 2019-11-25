@@ -76,7 +76,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 			for (double[] deltaDirection : DELTA_DIRECTION_ARRAY) {
 				final double currentPosX = enemyPosX + deltaDirection[0] * realSpeed;
 				final double currentPosY = enemyPosY + deltaDirection[1] * realSpeed;
-				System.out.println("currentPosX: " + currentPosX +",currentPosY: "+currentPosY);
+				//System.out.println("currentPosX: " + currentPosX +",currentPosY: "+currentPosY);
 				final double currentDistance = evaluateDistance(overlappableEntities, this, currentPosX, currentPosY, enemyWidth, enemyHeight);
 				if (currentDistance < minimumDistance) {
 					minimumDistance = currentDistance;

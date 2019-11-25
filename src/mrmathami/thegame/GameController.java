@@ -48,8 +48,8 @@ import java.util.concurrent.TimeUnit;
  * A game controller. Everything about the game should be managed in here.
  */
 public final class GameController extends AnimationTimer {
-	public double xMouse;
-	public double yMouse;
+	private double xMouse;
+	private double yMouse;
 	/**
 	 * Advance stuff. Just don't touch me. Google me if you are curious.
 	 */
@@ -64,16 +64,16 @@ public final class GameController extends AnimationTimer {
 	/**
 	 * The screen to draw on. Just don't touch me. Google me if you are curious.
 	 */
-	public Stage stageCurrent;
-	public GraphicsContext graphicsContextCurrent;
-	public Canvas canvasCurrent;
-	public Canvas canvasMainMenu;
-	public Scene sceneMainMenu;
-	public GraphicsContext gcMainMenu;
-	public Canvas canvasChooseStage;
-	public Scene sceneChooseStage;
-	public GraphicsContext gcChooseStage;
-	public GameController gameController = this;
+	private Stage stageCurrent;
+	private GraphicsContext graphicsContextCurrent;
+	private Canvas canvasCurrent;
+	private Canvas canvasMainMenu;
+	private Scene sceneMainMenu;
+	private GraphicsContext gcMainMenu;
+	private Canvas canvasChooseStage;
+	private Scene sceneChooseStage;
+	private GraphicsContext gcChooseStage;
+	private GameController gameController = this;
 
 	/**
 	 * Game field. Contain everything in the current game field.
@@ -146,12 +146,16 @@ public final class GameController extends AnimationTimer {
 					try {
 						Image imageMainMenu = new Image(new FileInputStream(".\\res\\image\\chonman.png"));
 						gcChooseStage.drawImage(imageMainMenu, 0, 0);
+						Image home1 = new Image(new FileInputStream(".\\res\\image\\home.png"));
+						home1 = DeleteWhiteImage.deleteWhiteImage2(home1);
+						gcChooseStage.drawImage(home1, 520, 595);
 					}
 					catch (FileNotFoundException e) {
 						System.out.println("Main Menu image not found");
 					}
 					gcChooseStage.setFont(new Font("Time New Roma", 15));
 					gcChooseStage.fillText("Màn 1", 230, 135);
+					gcChooseStage.fillText("Màn 2", 489, 135);
 					gcChooseStage.setFont(new Font("Time New Roma", 50));
 					gcChooseStage.fillText("Stage Select", 425, 63);
 					stageCurrent.show();
@@ -165,10 +169,13 @@ public final class GameController extends AnimationTimer {
 			}
 		});
 		Rectangle rectangleMan1 = new Rectangle(148, 141, 205, 90);
+		Rectangle rectangleMan2 = new Rectangle(407, 141, 205, 90);
+		Rectangle rectangleBack = new Rectangle(520, 595, 70, 70);
 		canvasChooseStage.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				if(rectangleMan1.contains(mouseEvent.getX(), mouseEvent.getY())) {
+				System.out.println(mouseEvent.getX() + " " + mouseEvent.getY());
+				if(rectangleMan1.contains(mouseEvent.getX(), mouseEvent.getY()) || rectangleMan2.contains(mouseEvent.getX(), mouseEvent.getY())) {
 					canvasCurrent = new Canvas(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 					graphicsContextCurrent = canvasCurrent.getGraphicsContext2D();
 
@@ -198,7 +205,12 @@ public final class GameController extends AnimationTimer {
 
 					// The game field. Please consider create another way to load a game field.
 					// TODO: I don't have much time, so, spawn some wall then :)
-					gameController.field = new GameField(GameStage.load("/stage/Man1.txt"));
+					if(rectangleMan1.contains(mouseEvent.getX(), mouseEvent.getY())) {
+						gameController.field = new GameField(GameStage.load("/stage/Man1.txt"));
+					}
+					else if(rectangleMan2.contains(mouseEvent.getX(), mouseEvent.getY())) {
+						gameController.field = new GameField(GameStage.load("/stage/Man2.txt"));
+					}
 
 					// The drawer. Nothing fun here.
 					gameController.drawer = new GameDrawer(graphicsContextCurrent, field);
@@ -210,6 +222,14 @@ public final class GameController extends AnimationTimer {
 					drawer.setFieldViewRegion(0.0, 0.0, Config.TILE_SIZE);
 					start();
 				}
+				else if(rectangleBack.contains(mouseEvent.getX(), mouseEvent.getY())) {
+					isPause = false;
+					stageCurrent.setScene(sceneMainMenu);
+					canvasCurrent = canvasMainMenu;
+					graphicsContextCurrent = gcMainMenu;
+					stop();
+				}
+
 			}
 		});
 	}
@@ -274,7 +294,9 @@ public final class GameController extends AnimationTimer {
 		final long currentTick = tick;
 		final long startNs = System.nanoTime();
 		if(graphicsContextCurrent != gcMainMenu) {
-			autoPlay();
+			if(dangauto == true) {
+				autoPlay();
+			}
 			// do a tick, as fast as possible
 			field.tick();
 
@@ -293,7 +315,12 @@ public final class GameController extends AnimationTimer {
 			//graphicsContextCurrent.fillText(String.format("MSPT: %3.2f", mspt), 0, 12);
             graphicsContextCurrent.setFont(new Font("Time New Roman", 60));
 			graphicsContextCurrent.fillText((int)(field.getCoins()) + "", 7*Config.TILE_SIZE + 5, 10*Config.TILE_SIZE - 12);
-
+			if(dangauto == false) {
+				graphicsContextCurrent.setFill(Color.BLACK);
+			}
+			else graphicsContextCurrent.setFill(Color.RED);
+			graphicsContextCurrent.setFont(new Font("Time New Roman", 40));
+			graphicsContextCurrent.fillText("AUTO", 13*Config.TILE_SIZE + 20, 10*Config.TILE_SIZE - 20);
 			if(isChooseTower) {
 				double Xgoc = xMouse - Config.TILE_SIZE/2.0;
 				double Ygoc = yMouse - Config.TILE_SIZE/2.0;
@@ -350,7 +377,7 @@ public final class GameController extends AnimationTimer {
 					if(((AbstractSpawner) entity).getNumOfSpawn() > 0) isHaveSpawner = true;
 				}
 			}
-			System.out.println(isHaveSpawner);
+
 			if(isHaveSpawner == false)
 			{
 				isPause = false;
@@ -365,7 +392,7 @@ public final class GameController extends AnimationTimer {
 					home = DeleteWhiteImage.deleteWhiteImage2(home);
 					graphicsContextCurrent.drawImage(home, 517, 307);
                     graphicsContextCurrent.setFont(new Font("Time New Roman", 30));
-                    graphicsContextCurrent.setFill(Color.BLACK);
+                    graphicsContextCurrent.setFill(Color.RED);
                     graphicsContextCurrent.fillText("Bạn đã thắng", 475, 270);
                 }
                 catch (FileNotFoundException e) {}
@@ -381,7 +408,7 @@ public final class GameController extends AnimationTimer {
 					home = DeleteWhiteImage.deleteWhiteImage2(home);
 					graphicsContextCurrent.drawImage(home, 517, 307);
                     graphicsContextCurrent.setFont(new Font("Time New Roman", 30));
-                    graphicsContextCurrent.setFill(Color.BLACK);
+                    graphicsContextCurrent.setFill(Color.WHITE);
                     graphicsContextCurrent.fillText("Bạn đã thua", 475, 270);
                 }
                 catch (FileNotFoundException e) {}
@@ -475,8 +502,8 @@ public final class GameController extends AnimationTimer {
 	private String nameTower = "";
 	private boolean isChooseSell = false;
 	private boolean isPause = false;
+	private boolean dangauto = false;
 	final void mouseDownHandler(MouseEvent mouseEvent) {
-        System.out.println(mouseEvent.getX() + " " + mouseEvent.getY());
 		Rectangle rectangleNormal = new Rectangle(0*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		Rectangle rectangleMachine = new Rectangle(1*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		Rectangle rectangleSniper = new Rectangle(2*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
@@ -485,6 +512,7 @@ public final class GameController extends AnimationTimer {
 		Rectangle rectangleResume = new Rectangle(472, 177, 172, 80);
 		Rectangle rectangleExit = new Rectangle(472, 456, 172, 80);
 		Rectangle rectangleHome = new Rectangle(517, 307, 70, 70);
+		Rectangle rectangleAuto = new Rectangle(13*Config.TILE_SIZE, 9*Config.TILE_SIZE, 2*Config.TILE_SIZE, Config.TILE_SIZE);
 		if(rectangleNormal.contains(mouseEvent.getX(),mouseEvent.getY())) {
 			nameTower = "NormalTower";
 			isChooseTower = true;
@@ -510,12 +538,20 @@ public final class GameController extends AnimationTimer {
 			if(isPause) {
 				isPause = false;
 				stageCurrent.setScene(sceneMainMenu);
+				canvasCurrent = canvasMainMenu;
+				graphicsContextCurrent = gcMainMenu;
 				stop();
 			}
 		} else if(rectangleHome.contains(mouseEvent.getX(), mouseEvent.getY()) && (isHaveSpawner == false || isHaveTarget == false)) {
 			stageCurrent.setScene(sceneMainMenu);
 			canvasCurrent = canvasMainMenu;
 			graphicsContextCurrent = gcMainMenu;
+		}
+		else if(rectangleAuto.contains(mouseEvent.getX(), mouseEvent.getY())) {
+			if(dangauto == true) {
+				dangauto = false;
+			}
+			else dangauto = true;
 		}
 
 

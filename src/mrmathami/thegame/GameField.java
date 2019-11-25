@@ -37,8 +37,7 @@ public final class GameField {
 		this.numOfTitles = gameStage.getNumOfTitles();
 		this.tickCount = 0;
 		entities.addAll(gameStage.getEntities());
-		// Tam thoi coin ban dau la 100
-		this.coins = 100;
+		this.coins = gameStage.getCoins();
 	}
 
 	public final  double getNumOfTitles()

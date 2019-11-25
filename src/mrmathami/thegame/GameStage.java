@@ -18,6 +18,11 @@ public final class GameStage {
 	private final long height;
 	private final long numOfTitles;
 	public static List<List<Integer>> map = new ArrayList<List<Integer>>();
+	private static double coins;
+
+	public double getCoins() {
+		return coins;
+	}
 
 	@Nonnull
 	private final List<GameEntity> entities;
@@ -29,14 +34,7 @@ public final class GameStage {
 		System.out.println("Width: " + width + ",Height: " + height + ",Num of Titles: " + numOfTitles);
 
 		this.entities = List.copyOf(entities);
-		for(int i =0; i < map.size(); i++)
-		{
-			for(int j =0; j < map.get(i).size();j++)
-			{
-				System.out.print(map.get(i).get(j) +" ");
-			}
-			System.out.println();
-		}
+
 
 	}
 
@@ -134,7 +132,10 @@ public final class GameStage {
 								road.setDistance(0.0);
 							}
 						}
-					} else {
+					} else if("Coins".equals(value)) {
+						coins = scanner.nextInt();
+					}
+					else {
 						System.out.println("Unexpected value! Input value: " + value);
 						scanner.nextLine();
 //						throw new InputMismatchException("Unexpected value! Input value: " + value);

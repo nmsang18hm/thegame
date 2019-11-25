@@ -19,7 +19,7 @@ public final class SmallerEnemyDrawer implements EntityDrawer {
 		try {
 			AbstractEnemy enemy = (AbstractEnemy) entity;
 			graphicsContext.setFill(Color.GREEN);
-			graphicsContext.fillRect(screenPosX, screenPosY -20, ((double)enemy.getHealth() /(double)Config.SMALLER_ENEMY_HEALTH )* Config.TILE_SIZE,14);
+			graphicsContext.fillRect(screenPosX, screenPosY -20, ((double)enemy.getHealth() /(double)Config.SMALLER_ENEMY_HEALTH )* Config.TILE_SIZE*Config.SMALLER_ENEMY_SIZE,14);
 			Image image = new Image(new FileInputStream(".\\res\\image\\SmallerEnemy.png"));
 			Image image1 = DeleteWhiteImage.deleteWhiteImage(image);
 			graphicsContext.drawImage(image1, screenPosX, screenPosY);
