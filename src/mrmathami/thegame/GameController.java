@@ -287,6 +287,7 @@ public final class GameController extends AnimationTimer {
 	 */
 	private boolean isHaveTarget = false;
 	private boolean isHaveSpawner = false;
+	public int tocdo = 1;
 
 	@Override
 	public void handle(long now) {
@@ -298,7 +299,10 @@ public final class GameController extends AnimationTimer {
 				autoPlay();
 			}
 			// do a tick, as fast as possible
-			field.tick();
+			for(int i = 0; i < tocdo; i++) {
+				field.tick();
+			}
+
 
 			// if it's too late to draw a new frame, skip it.
 			// make the game feel really laggy, so...
@@ -423,6 +427,9 @@ public final class GameController extends AnimationTimer {
 				catch (FileNotFoundException e) {}
 				stop();
 			}
+			graphicsContextCurrent.setFill(Color.BLACK);
+			graphicsContextCurrent.setFont(new Font("Time New Roman", 60));
+			graphicsContextCurrent.fillText("X" + tocdo, 8*Config.TILE_SIZE + 20, 10*Config.TILE_SIZE - 15);
 		}
 		else tick();
 
@@ -464,6 +471,16 @@ public final class GameController extends AnimationTimer {
 	public final void keyDownHandler(KeyEvent keyEvent) {
 		final KeyCode keyCode = keyEvent.getCode();
 		if (keyCode == KeyCode.W) {
+			if(tocdo == 1){
+				System.out.println("W");
+				tocdo = 2;
+				return;
+			} else if(tocdo == 2){
+				tocdo = 3;
+				return;
+			}else if(tocdo == 3) {
+				tocdo = 1;
+			}
 		} else if (keyCode == KeyCode.S) {
 		} else if (keyCode == KeyCode.A) {
 		} else if (keyCode == KeyCode.D) {
