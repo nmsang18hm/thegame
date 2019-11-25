@@ -65,11 +65,11 @@ public final class Config {
 
 	//region Tower
 	public static final long NORMAL_TOWER_SPEED = 30;
-	public static final double NORMAL_TOWER_RANGE = 2.0;
+	public static final double NORMAL_TOWER_RANGE = 2.5;
 	public static final double NORMAL_TOWER_COST = 4.0;
 
 	public static final long MACHINE_GUN_TOWER_SPEED = 5;
-	public static final double MACHINE_GUN_TOWER_RANGE = 1.0;
+	public static final double MACHINE_GUN_TOWER_RANGE = 1.5;
 	public static final double MACHINE_GUN_TOWER_COST = 4.0;
 
 	public static final long SNIPER_TOWER_SPEED = 60;

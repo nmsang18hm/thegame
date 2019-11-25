@@ -237,6 +237,9 @@ public final class GameController extends AnimationTimer {
 	 *
 	 * @param now not used. It is a timestamp in nanosecond.
 	 */
+	private boolean isHaveTarget = false;
+	private boolean isHaveSpawner = false;
+
 	@Override
 	public void handle(long now) {
 		// don't touch me.
@@ -268,14 +271,20 @@ public final class GameController extends AnimationTimer {
 				if(nameTower == "NormalTower") {
 					NormalTowerDrawer normalTowerDrawer = new NormalTowerDrawer();
 					normalTowerDrawer.draw(field.getTickCount(), graphicsContextCurrent, new NormalTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+					graphicsContextCurrent.setFill(Color.BLUE);
+					graphicsContextCurrent.strokeRect(xMouse - Config.NORMAL_TOWER_RANGE*Config.TILE_SIZE, yMouse - Config.NORMAL_TOWER_RANGE*Config.TILE_SIZE, 2*Config.NORMAL_TOWER_RANGE*Config.TILE_SIZE, 2*Config.NORMAL_TOWER_RANGE*Config.TILE_SIZE);
 				}
 				else if(nameTower == "MachineTower") {
 					MachineGunTowerDrawer machineGunTowerDrawer = new MachineGunTowerDrawer();
 					machineGunTowerDrawer.draw(field.getTickCount(), graphicsContextCurrent, new MachineGunTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+					graphicsContextCurrent.setFill(Color.BLUE);
+					graphicsContextCurrent.strokeRect(xMouse - Config.MACHINE_GUN_TOWER_RANGE*Config.TILE_SIZE, yMouse - Config.MACHINE_GUN_TOWER_RANGE*Config.TILE_SIZE, 2*Config.MACHINE_GUN_TOWER_RANGE*Config.TILE_SIZE, 2*Config.MACHINE_GUN_TOWER_RANGE*Config.TILE_SIZE);
 				}
 				else if (nameTower == "SniperTower") {
 					SniperTowerDrawer sniperTowerDrawer = new SniperTowerDrawer();
 					sniperTowerDrawer.draw(field.getTickCount(), graphicsContextCurrent, new SniperTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+					graphicsContextCurrent.setFill(Color.BLUE);
+					graphicsContextCurrent.strokeRect(xMouse - Config.SNIPER_TOWER_RANGE*Config.TILE_SIZE, yMouse - Config.SNIPER_TOWER_RANGE*Config.TILE_SIZE, 2*Config.SNIPER_TOWER_RANGE*Config.TILE_SIZE, 2*Config.SNIPER_TOWER_RANGE*Config.TILE_SIZE);
 				}
 			}
 			else if(isChooseSell) {
@@ -303,8 +312,9 @@ public final class GameController extends AnimationTimer {
 					yMouse = mouseEvent.getY();
 				}
 			});
-			boolean isHaveTarget = false;
-			boolean isHaveSpawner = false;
+
+			isHaveSpawner = false;
+			isHaveTarget = false;
 			for(GameEntity entity : field.getEntities()) {
 				if(entity instanceof Target) isHaveTarget = true;
 				else if(entity instanceof AbstractSpawner) isHaveSpawner = true;
@@ -443,7 +453,7 @@ public final class GameController extends AnimationTimer {
 		Rectangle rectanglePause = new Rectangle(15*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		Rectangle rectangleResume = new Rectangle(472, 177, 172, 80);
 		Rectangle rectangleExit = new Rectangle(472, 456, 172, 80);
-
+		Rectangle rectangleHome = new Rectangle(517, 307, 70, 70);
 		if(rectangleNormal.contains(mouseEvent.getX(),mouseEvent.getY())) {
 			nameTower = "NormalTower";
 			isChooseTower = true;
@@ -471,6 +481,10 @@ public final class GameController extends AnimationTimer {
 				stageCurrent.setScene(sceneMainMenu);
 				stop();
 			}
+		} else if(rectangleHome.contains(mouseEvent.getX(), mouseEvent.getY()) && (isHaveSpawner == false || isHaveTarget == false)) {
+			stageCurrent.setScene(sceneMainMenu);
+			canvasCurrent = canvasMainMenu;
+			graphicsContextCurrent = gcMainMenu;
 		}
 
 
