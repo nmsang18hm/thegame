@@ -321,7 +321,9 @@ public final class GameController extends AnimationTimer {
 			isHaveTarget = false;
 			for(GameEntity entity : field.getEntities()) {
 				if(entity instanceof Target) isHaveTarget = true;
-				else if(entity instanceof AbstractSpawner) isHaveSpawner = true;
+				else if(entity instanceof AbstractSpawner) {
+					if(((AbstractSpawner) entity).getNumOfSpawn() > 0) isHaveSpawner = true;
+				}
 			}
 			System.out.println(isHaveSpawner);
 			if(isHaveSpawner == false)
