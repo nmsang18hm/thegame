@@ -16,6 +16,10 @@ public abstract class AbstractSpawner<E extends AbstractEnemy> extends AbstractT
 	private long tickDown;
 	private long numOfSpawn;
 
+	public long getNumOfSpawn() {
+		return numOfSpawn;
+	}
+
 	protected AbstractSpawner(long createdTick, long posX, long posY, long width, long height, double spawningSize, @Nonnull Class<E> spawningClass, long spawnInterval, long initialDelay, long numOfSpawn) {
 		super(createdTick, posX, posY, width, height);
 		this.spawningSize = spawningSize;

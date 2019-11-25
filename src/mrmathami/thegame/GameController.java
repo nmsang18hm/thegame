@@ -24,6 +24,7 @@ import mrmathami.thegame.drawer.*;
 import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.enemy.AbstractEnemy;
 import mrmathami.thegame.entity.tile.Mountain;
+import mrmathami.thegame.entity.tile.Road;
 import mrmathami.thegame.entity.tile.Target;
 import mrmathami.thegame.entity.tile.spawner.AbstractSpawner;
 import mrmathami.thegame.entity.tile.tower.AbstractTower;
@@ -35,7 +36,9 @@ import mrmathami.utilities.ThreadFactoryBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -262,12 +265,16 @@ public final class GameController extends AnimationTimer {
 	 *
 	 * @param now not used. It is a timestamp in nanosecond.
 	 */
+	private boolean isHaveTarget = false;
+	private boolean isHaveSpawner = false;
+
 	@Override
 	public void handle(long now) {
 		// don't touch me.
 		final long currentTick = tick;
 		final long startNs = System.nanoTime();
 		if(graphicsContextCurrent != gcMainMenu) {
+			autoPlay();
 			// do a tick, as fast as possible
 			field.tick();
 
@@ -293,14 +300,20 @@ public final class GameController extends AnimationTimer {
 				if(nameTower == "NormalTower") {
 					NormalTowerDrawer normalTowerDrawer = new NormalTowerDrawer();
 					normalTowerDrawer.draw(field.getTickCount(), graphicsContextCurrent, new NormalTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+					graphicsContextCurrent.setFill(Color.BLUE);
+					graphicsContextCurrent.strokeRect(xMouse - Config.NORMAL_TOWER_RANGE*Config.TILE_SIZE, yMouse - Config.NORMAL_TOWER_RANGE*Config.TILE_SIZE, 2*Config.NORMAL_TOWER_RANGE*Config.TILE_SIZE, 2*Config.NORMAL_TOWER_RANGE*Config.TILE_SIZE);
 				}
 				else if(nameTower == "MachineTower") {
 					MachineGunTowerDrawer machineGunTowerDrawer = new MachineGunTowerDrawer();
 					machineGunTowerDrawer.draw(field.getTickCount(), graphicsContextCurrent, new MachineGunTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+					graphicsContextCurrent.setFill(Color.BLUE);
+					graphicsContextCurrent.strokeRect(xMouse - Config.MACHINE_GUN_TOWER_RANGE*Config.TILE_SIZE, yMouse - Config.MACHINE_GUN_TOWER_RANGE*Config.TILE_SIZE, 2*Config.MACHINE_GUN_TOWER_RANGE*Config.TILE_SIZE, 2*Config.MACHINE_GUN_TOWER_RANGE*Config.TILE_SIZE);
 				}
 				else if (nameTower == "SniperTower") {
 					SniperTowerDrawer sniperTowerDrawer = new SniperTowerDrawer();
 					sniperTowerDrawer.draw(field.getTickCount(), graphicsContextCurrent, new SniperTower(field.getTickCount(), 0, 0), Xgoc, Ygoc, Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+					graphicsContextCurrent.setFill(Color.BLUE);
+					graphicsContextCurrent.strokeRect(xMouse - Config.SNIPER_TOWER_RANGE*Config.TILE_SIZE, yMouse - Config.SNIPER_TOWER_RANGE*Config.TILE_SIZE, 2*Config.SNIPER_TOWER_RANGE*Config.TILE_SIZE, 2*Config.SNIPER_TOWER_RANGE*Config.TILE_SIZE);
 				}
 			}
 			else if(isChooseSell) {
@@ -328,13 +341,16 @@ public final class GameController extends AnimationTimer {
 					yMouse = mouseEvent.getY();
 				}
 			});
-			boolean isHaveTarget = false;
-			boolean isHaveSpawner = false;
+
+			isHaveSpawner = false;
+			isHaveTarget = false;
 			for(GameEntity entity : field.getEntities()) {
 				if(entity instanceof Target) isHaveTarget = true;
-				else if(entity instanceof AbstractSpawner) isHaveSpawner = true;
+				else if(entity instanceof AbstractSpawner) {
+					if(((AbstractSpawner) entity).getNumOfSpawn() > 0) isHaveSpawner = true;
+				}
 			}
-
+			System.out.println(isHaveSpawner);
 			if(isHaveSpawner == false)
 			{
 				isPause = false;
@@ -468,7 +484,7 @@ public final class GameController extends AnimationTimer {
 		Rectangle rectanglePause = new Rectangle(15*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		Rectangle rectangleResume = new Rectangle(472, 177, 172, 80);
 		Rectangle rectangleExit = new Rectangle(472, 456, 172, 80);
-
+		Rectangle rectangleHome = new Rectangle(517, 307, 70, 70);
 		if(rectangleNormal.contains(mouseEvent.getX(),mouseEvent.getY())) {
 			nameTower = "NormalTower";
 			isChooseTower = true;
@@ -496,6 +512,10 @@ public final class GameController extends AnimationTimer {
 				stageCurrent.setScene(sceneMainMenu);
 				stop();
 			}
+		} else if(rectangleHome.contains(mouseEvent.getX(), mouseEvent.getY()) && (isHaveSpawner == false || isHaveTarget == false)) {
+			stageCurrent.setScene(sceneMainMenu);
+			canvasCurrent = canvasMainMenu;
+			graphicsContextCurrent = gcMainMenu;
 		}
 
 
@@ -561,5 +581,74 @@ public final class GameController extends AnimationTimer {
 //		drawer.screenToFieldPosY(mouseEvent.getY());
 	}
 
+	void autoPlay() {
+		Random random = new Random();
+		int randomNumber = random.nextInt(3);
+
+		List<Mountain> mountainList = new ArrayList<>();
+		for(GameEntity entity : field.getEntities()) {
+			if(entity instanceof Mountain) mountainList.add((Mountain) entity);
+		}
+		int indexMax = -1;
+		int max = -1;
+		if(randomNumber == 0) {
+			for(int i = 0; i < mountainList.size(); i++) {
+				List<Road> roadList = (List<Road>) GameEntities.getFilteredOverlappedEntities(field.getEntities(), Road.class, mountainList.get(i).getPosX() + 0.5 - Config.NORMAL_TOWER_RANGE,
+						mountainList.get(i).getPosY() + 0.5 - Config.NORMAL_TOWER_RANGE, 2*Config.NORMAL_TOWER_RANGE, 2*Config.NORMAL_TOWER_RANGE);
+				List<AbstractTower> abstractTowerList = (List<AbstractTower>) GameEntities.getFilteredContainingEntities(field.getEntities(), AbstractTower.class, mountainList.get(i).getPosX() + 0.1, mountainList.get(i).getPosY() + 0.1, 0.1, 0.1);
+				if(roadList.size() > max && abstractTowerList.size() == 0) {
+					max = roadList.size();
+					indexMax = i;
+				}
+			}
+			if(indexMax > -1) {
+				for(int i = 0; i < mountainList.size(); i++) {
+					if(i == indexMax && field.getCoins() >= Config.NORMAL_TOWER_COST) {
+						field.doSpawn(new NormalTower(field.getTickCount(), (long)mountainList.get(i).getPosX(), (long)mountainList.get(i).getPosY()));
+						field.setCoins(field.getCoins() - Config.NORMAL_TOWER_COST);
+					}
+				}
+			}
+		}
+		else if(randomNumber == 1) {
+			for(int i = 0; i < mountainList.size(); i++) {
+				List<Road> roadList = (List<Road>) GameEntities.getFilteredOverlappedEntities(field.getEntities(), Road.class, mountainList.get(i).getPosX() + 0.5 - Config.MACHINE_GUN_TOWER_RANGE,
+						mountainList.get(i).getPosY() + 0.5 - Config.MACHINE_GUN_TOWER_RANGE, 2*Config.MACHINE_GUN_TOWER_RANGE, 2*Config.MACHINE_GUN_TOWER_RANGE);
+				List<AbstractTower> abstractTowerList = (List<AbstractTower>) GameEntities.getFilteredContainingEntities(field.getEntities(), AbstractTower.class, mountainList.get(i).getPosX() + 0.1, mountainList.get(i).getPosY() + 0.1, 0.1, 0.1);
+				if(roadList.size() > max && abstractTowerList.size() == 0) {
+					max = roadList.size();
+					indexMax = i;
+				}
+			}
+			if(indexMax > -1) {
+				for(int i = 0; i < mountainList.size(); i++) {
+					if(i == indexMax && field.getCoins() >= Config.MACHINE_GUN_TOWER_COST) {
+						field.doSpawn(new MachineGunTower(field.getTickCount(), (long)mountainList.get(i).getPosX(), (long)mountainList.get(i).getPosY()));
+						field.setCoins(field.getCoins() - Config.MACHINE_GUN_TOWER_COST);
+					}
+				}
+			}
+		}
+		else if(randomNumber == 2) {
+			for(int i = 0; i < mountainList.size(); i++) {
+				List<Road> roadList = (List<Road>) GameEntities.getFilteredOverlappedEntities(field.getEntities(), Road.class, mountainList.get(i).getPosX() + 0.5 - Config.SNIPER_TOWER_RANGE,
+						mountainList.get(i).getPosY() + 0.5 - Config.SNIPER_TOWER_RANGE, 2*Config.SNIPER_TOWER_RANGE, 2*Config.SNIPER_TOWER_RANGE);
+				List<AbstractTower> abstractTowerList = (List<AbstractTower>) GameEntities.getFilteredContainingEntities(field.getEntities(), AbstractTower.class, mountainList.get(i).getPosX() + 0.1, mountainList.get(i).getPosY() + 0.1, 0.1, 0.1);
+				if(roadList.size() > max && abstractTowerList.size() == 0) {
+					max = roadList.size();
+					indexMax = i;
+				}
+			}
+			if(indexMax > -1) {
+				for(int i = 0; i < mountainList.size(); i++) {
+					if(i == indexMax && field.getCoins() >= Config.SNIPER_TOWER_COST) {
+						field.doSpawn(new SniperTower(field.getTickCount(), (long)mountainList.get(i).getPosX(), (long)mountainList.get(i).getPosY()));
+						field.setCoins(field.getCoins() - Config.SNIPER_TOWER_COST);
+					}
+				}
+			}
+		}
+
+	}
 
 }
