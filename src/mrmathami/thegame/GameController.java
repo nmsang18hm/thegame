@@ -163,7 +163,6 @@ public final class GameController extends AnimationTimer {
 		canvasChooseStage.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				System.out.println(mouseEvent.getX() + " " + mouseEvent.getY());
 				if(rectangleMan1.contains(mouseEvent.getX(), mouseEvent.getY())) {
 					canvasCurrent = new Canvas(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 					graphicsContextCurrent = canvasCurrent.getGraphicsContext2D();
@@ -311,14 +310,42 @@ public final class GameController extends AnimationTimer {
 				else if(entity instanceof AbstractSpawner) isHaveSpawner = true;
 			}
 
-			if(isHaveSpawner == false || isHaveTarget == false)
+			if(isHaveSpawner == false)
 			{
 				isPause = false;
-				stageCurrent.setScene(sceneMainMenu);
-				canvasCurrent = canvasMainMenu;
-				graphicsContextCurrent = gcMainMenu;
+				//stageCurrent.setScene(sceneMainMenu);
+				//canvasCurrent = canvasMainMenu;
+				//graphicsContextCurrent = gcMainMenu;
+                try {
+                    Image khung = new Image(new FileInputStream(".\\res\\image\\Khung.png"));
+                    khung = DeleteWhiteImage.deleteWhiteImage(khung);
+                    graphicsContextCurrent.drawImage(khung, 400, 200);
+					Image home = new Image(new FileInputStream(".\\res\\image\\home.png"));
+					home = DeleteWhiteImage.deleteWhiteImage2(home);
+					graphicsContextCurrent.drawImage(home, 517, 307);
+                    graphicsContextCurrent.setFont(new Font("Time New Roman", 30));
+                    graphicsContextCurrent.setFill(Color.BLACK);
+                    graphicsContextCurrent.fillText("Bạn đã thắng", 475, 270);
+                }
+                catch (FileNotFoundException e) {}
 				stop();
 			}
+			else if(isHaveTarget == false) {
+                isPause = false;
+                try {
+                    Image khung = new Image(new FileInputStream(".\\res\\image\\Khung.png"));
+                    khung = DeleteWhiteImage.deleteWhiteImage2(khung);
+                    graphicsContextCurrent.drawImage(khung, 400, 200);
+					Image home = new Image(new FileInputStream(".\\res\\image\\home.png"));
+					home = DeleteWhiteImage.deleteWhiteImage2(home);
+					graphicsContextCurrent.drawImage(home, 517, 307);
+                    graphicsContextCurrent.setFont(new Font("Time New Roman", 30));
+                    graphicsContextCurrent.setFill(Color.BLACK);
+                    graphicsContextCurrent.fillText("Bạn đã thua", 475, 270);
+                }
+                catch (FileNotFoundException e) {}
+                stop();
+            }
 			if(isPause) {
 				try {
 					Image khungpause = new Image(new FileInputStream(".\\res\\image\\khungpause.png"));
@@ -408,6 +435,7 @@ public final class GameController extends AnimationTimer {
 	private boolean isChooseSell = false;
 	private boolean isPause = false;
 	final void mouseDownHandler(MouseEvent mouseEvent) {
+        System.out.println(mouseEvent.getX() + " " + mouseEvent.getY());
 		Rectangle rectangleNormal = new Rectangle(0*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		Rectangle rectangleMachine = new Rectangle(1*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
 		Rectangle rectangleSniper = new Rectangle(2*Config.TILE_SIZE, 9*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
